@@ -1,10 +1,13 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
   appId: 'com.unnamed',
   appName: 'unnamed',
   webDir: 'dist',
-  bundledWebRuntime: false
-};
+  bundledWebRuntime: false,
+  // server: {
+  //   "url": "http://192.168.1.9:5173/"
+  // }
+}
 
-export default config;
+export default config
