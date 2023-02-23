@@ -1,6 +1,13 @@
+@import './layout/bottom-navigation.scss';
+@import './layout/header.scss';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+   font-family: 'Rubik', sans-serif;
+}
 .tab-menu__item {
    --ripple-color: transparent;
 }
@@ -12,18 +19,6 @@
 
 .bottom-nav__item {
    @apply flex flex-col gap-1 items-center;
-}
-
-.footer {
-   @apply fixed bottom-0;
-   @apply w-full pb-3;
-
-   ion-grid {
-      @apply w-11/12;
-      // @apply bg-blue-500/50;
-      @apply border shadow-lg;
-      @apply rounded-lg;
-   }
 }
 
 // ion-grid {

@@ -1,0 +1,26 @@
+.bottom-navigation {
+   @apply fixed bottom-0;
+   @apply w-full pb-2;
+   // @apply border-t-2 border-gray-400;
+
+   &__item {
+      @apply flex flex-col gap-1 items-center;
+      @apply text-gray-400;
+      p {
+         @apply text-sm font-medium capitalize;
+      }
+
+      &--active {
+         // color: #00adb4;
+         // color: #32d3de;
+         color: #2867b2;
+      }
+   }
+
+   ion-grid {
+      @apply w-11/12;
+      // @apply bg-blue-500/50;
+      @apply border border-gray-200 shadow-lg;
+      @apply rounded-xl;
+   }
+}

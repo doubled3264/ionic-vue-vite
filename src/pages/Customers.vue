@@ -5,19 +5,34 @@ import {
    IonTitle,
    IonContent,
    IonPage,
+   onIonViewWillEnter,
 } from '@ionic/vue'
-import BasePages from '../layout/BasePages.vue'
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import BottomNavigation from '../layout/BottomNavigation.vue'
+
+const store = useStore()
+const page = 'pelanggan'
+const bottomNavigationItem = ref([])
+
+onIonViewWillEnter(() => {
+   store.commit('bottomNavigation/turnOffAll')
+   store.commit('bottomNavigation/turnOn', page)
+   bottomNavigationItem.value = store.getters['bottomNavigation/getItem']
+})
 </script>
 
 <template>
    <ion-page>
-      <ion-header>
+      <ion-header class="ion-no-border">
          <ion-toolbar>
-            <ion-title>Customers</ion-title>
+            <ion-title class="ion-text-center">pelanggan</ion-title>
          </ion-toolbar>
       </ion-header>
       <ion-content>
-         <div class="example-content">Customers content</div>
+         <bottom-navigation
+            :navigation-item="bottomNavigationItem"
+         ></bottom-navigation>
       </ion-content>
    </ion-page>
 </template>

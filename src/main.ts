@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
-import { IonicVue } from '@ionic/vue'
+import { IonicVue, createAnimation } from '@ionic/vue'
 import router from './routes'
+import store from './store'
 import App from './App.vue'
 
 /* Core CSS required for Ionic components to work properly */
@@ -25,8 +26,24 @@ import './theme/variables.css'
 /* custom style */
 import './assets/style/index.scss'
 
-const app = createApp(App).use(IonicVue).use(router)
+const myAnimation = (baseEl, opts) => {
+  const { enteringEl, leavingEl } = opts
+  const enteringPage = createAnimation('entering-page-animation')
+  const leavingPage = createAnimation('leaving-page-animation')
+  return createAnimation('root-transition').addAnimation([
+    enteringPage,
+    leavingPage,
+  ])
+}
+
+const app = createApp(App)
+  .use(IonicVue, {
+    animated: true,
+    navAnimation: myAnimation,
+  })
+  .use(router)
+  .use(store)
 
 router.isReady().then(() => {
-   app.mount('#app')
+  app.mount('#app')
 })
