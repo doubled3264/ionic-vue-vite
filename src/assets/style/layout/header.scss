@@ -1,0 +1,24 @@
+.home-page,
+.orders-page,
+.bills-page,
+.customers-list-page,
+.customers-add-page{
+   ion-toolbar {
+      // @apply bg-lapis-lazuli;
+      --min-height: 52px;
+      --padding-end: 12px;
+      --background: #2867b2;
+      ion-title {
+         @apply text-lg font-medium capitalize text-white;
+      }
+
+      ion-buttons {
+         ion-button {
+            --color: #fff;
+            // svg {
+            //   @apply text-white;
+            // }
+         }
+      }
+   }
+}

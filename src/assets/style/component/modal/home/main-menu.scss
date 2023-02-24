@@ -1,0 +1,26 @@
+.modal-main-menu {
+   ion-toolbar {
+      ion-title {
+         @apply font-medium capitalize text-gray-500;
+         @apply pl-2;
+      }
+      ion-button {
+         @apply text-gray-500;
+      }
+   }
+
+   &__inner {
+      @apply px-4;
+      h3 {
+         @apply text-lg font-semibold capitalize text-gray-500;
+      }
+
+      ion-item {
+         @apply text-gray-500;
+         ion-label {
+            @apply pl-3;
+            @apply font-medium capitalize;
+         }
+      }
+   }
+}

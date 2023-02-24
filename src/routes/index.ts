@@ -12,7 +12,15 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/customers',
-    component: () => import('../pages/Customers.vue'),
+    component: () => import('../pages/customers/BaseCustomer.vue'),
+    children: [{
+      path: '',
+      component: () => import('../pages/customers/CustomerList.vue')
+    },
+    {
+      path: 'add',
+      component: () => import('../pages/customers/CustomerAdd.vue')
+    }]
   },
   {
     path: '/orders',

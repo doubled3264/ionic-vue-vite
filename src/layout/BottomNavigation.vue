@@ -30,7 +30,7 @@ onIonViewWillEnter(() => {
             <ion-col
                v-for="(item, index) in props.navigationItem"
                :key="index + 1"
-               size="3"
+               size="4"
                :router-link="item.path"
             >
                <div

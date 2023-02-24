@@ -950,6 +950,11 @@ module.exports = {
       40: '40',
       50: '50',
     },
+    extend: {
+      colors: {
+        'lapis-lazuli': '#2867b2',
+      }
+    }
   },
   plugins: [],
 }

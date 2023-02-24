@@ -14,12 +14,13 @@ import {
   IonList,
   IonItem,
   onIonViewWillEnter,
+  onIonViewDidEnter,
 } from '@ionic/vue'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-import BottomNavigation from '../layout/BottomNavigation.vue'
-import CustomIcon from '../components/custom/Icon.vue'
-import { plus } from '../utils/svg'
+import BottomNavigation from '../../layout/BottomNavigation.vue'
+import CustomIcon from '../../components/custom/Icon.vue'
+import { plus } from '../../utils/svg'
 
 const store = useStore()
 const page = 'pelanggan'
@@ -39,7 +40,7 @@ function dismiss() {
 </script>
 
 <template>
-  <ion-page class="customers-page">
+  <ion-page class="customers-list-page">
     <ion-header class="ion-no-border">
       <ion-toolbar mode="ios">
         <ion-title>pelanggan</ion-title>

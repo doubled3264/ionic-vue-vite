@@ -35,12 +35,12 @@ export default {
         icon: bill,
         isActive: false,
       },
-      {
-        title: 'pelanggan',
-        path: '/customers',
-        icon: user,
-        isActive: false,
-      },
+      // {
+      //   title: 'pelanggan',
+      //   path: '/customers',
+      //   icon: user,
+      //   isActive: false,
+      // },
     ],
     name: 'maman racing mantap',
   },

@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { IonicVue, createAnimation } from '@ionic/vue'
+import { StatusBar, Style } from '@capacitor/status-bar'
 import router from './routes'
 import store from './store'
 import App from './App.vue'
@@ -47,3 +48,6 @@ const app = createApp(App)
 router.isReady().then(() => {
   app.mount('#app')
 })
+
+/* Change status bar color */
+StatusBar.setBackgroundColor({ color: '#2867b2' })

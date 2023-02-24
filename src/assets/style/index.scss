@@ -1,6 +1,9 @@
 @import './layout/bottom-navigation.scss';
 @import './layout/header.scss';
 
+@import './component/modal/home/main-menu.scss';
+@import './component/modal/customer.scss';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

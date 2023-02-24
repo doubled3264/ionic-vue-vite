@@ -13,7 +13,8 @@
       &--active {
          // color: #00adb4;
          // color: #32d3de;
-         color: #2867b2;
+         // color: #2867b2;
+         @apply text-lapis-lazuli;
       }
    }
 
