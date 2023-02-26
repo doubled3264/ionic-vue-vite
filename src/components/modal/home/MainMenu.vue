@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import {
   IonModal,
   IonHeader,
@@ -7,8 +8,11 @@ import {
   IonTitle,
   IonButtons,
   IonButton,
-  IonLabel
+  IonLabel,
+  IonList,
+  IonItem,
 } from '@ionic/vue'
+import { Contacts } from '@capacitor-community/contacts'
 import { useRouter } from 'vue-router'
 import CustomIcon from '../../custom/Icon.vue'
 import { order, cross, user, bill, box, trolley } from '../../../utils/svg'
@@ -18,6 +22,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['closeModal'])
 const router = useRouter()
+const contactList: any = ref([])
 function closeModal() {
   if (props.isOpen) {
     emit('closeModal')
@@ -26,6 +31,27 @@ function closeModal() {
 function navigate(path: string) {
   closeModal()
   router.push({ path: path })
+}
+
+const printContactsData = async () => {
+  const result = await Contacts.getContacts({
+    projection: {
+      // Specify which fields should be retrieved.
+      name: true,
+      phones: true,
+    },
+  })
+
+  for (const contact of result.contacts) {
+    const number = contact.phones?.[0]?.number
+    const street = contact.postalAddresses?.[0]?.street
+    console.log(number, street)
+    contactList.value.push({
+      id: contact.contactId,
+      name: contact.name?.display,
+      phone: contact.phones?.[1]?.number,
+    })
+  }
 }
 </script>
 <template>
@@ -44,7 +70,7 @@ function navigate(path: string) {
       <div class="modal-main-menu__inner">
         <h3>pelanggan</h3>
         <ion-list lines="none">
-          <ion-item>
+          <ion-item @click="navigate('/customers')">
             <custom-icon :svg-icon="user" width="20"></custom-icon>
             <ion-label>daftar pelanggan</ion-label>
           </ion-item>
@@ -74,8 +100,14 @@ function navigate(path: string) {
             <custom-icon :svg-icon="box" width="20"></custom-icon>
             <ion-label>daftar barang</ion-label>
           </ion-item>
+          <ion-item @click="printContactsData">
+            <custom-icon :svg-icon="box" width="20"></custom-icon>
+            <ion-label>get contact</ion-label>
+          </ion-item>
+          <ion-item @click="printContactsData">
+            <p>{{ contactList }}</p>
+          </ion-item>
         </ion-list>
-
       </div>
     </ion-content>
   </ion-modal>

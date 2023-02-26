@@ -27,8 +27,11 @@ import './theme/variables.css'
 /* custom style */
 import './assets/style/index.scss'
 
-const myAnimation = (baseEl, opts) => {
+const myAnimation = (baseEl: any, opts: any) => {
   const { enteringEl, leavingEl } = opts
+  console.log(baseEl)
+  console.log(enteringEl)
+  console.log(leavingEl)
   const enteringPage = createAnimation('entering-page-animation')
   const leavingPage = createAnimation('leaving-page-animation')
   return createAnimation('root-transition').addAnimation([
