@@ -1,30 +1,58 @@
 ion-modal::part(backdrop) {
-  /* background: rgba(209, 213, 219); */
-  background: black;
-  --backdrop-opacity: 0.7;
-  /* opacity: 0.9; */
+   /* background: rgba(209, 213, 219); */
+   background: black;
+   --backdrop-opacity: 0.7;
+   /* opacity: 0.9; */
 }
-ion-modal.modal-customer {
-   &-add {
-      --width: 80%;
-      --height: fit-content;
-      --border-radius: 8px;
-      --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-         0 4px 6px -4px rgb(0 0 0 / 0.1);
+ion-modal.modal-add-options {
+   --width: 80%;
+   --height: fit-content;
+   --border-radius: 8px;
+   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-      .modal-customer-add__inner {
-         @apply p-5;
-         h3 {
-           @apply font-semibold text-lapis-lazuli;
+   .modal-add-options__inner {
+      @apply p-5;
+      h3 {
+         @apply font-semibold capitalize text-lapis-lazuli;
+      }
+
+      ion-item {
+         @apply my-1;
+         p {
+            @apply font-medium text-gray-500;
          }
+      }
+   }
+}
 
-         ion-item{
-           @apply my-1;
-           p {
-             @apply font-medium text-gray-500;
+.modal-search-contact {
+   ion-toolbar {
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      --background: white;
+   }
 
-           }
-         } 
+   &__item {
+      @apply flex items-center justify-between;
+      @apply w-full;
+      @apply py-2;
+      @apply text-gray-500;
+
+      h3 {
+         @apply text-lg font-medium;
+      }
+      p {
+         @apply flex gap-1 items-center;
+         @apply mt-0.5;
+      }
+   }
+
+   &__nav {
+      ion-buttons {
+         ion-button {
+            --color: #fff;
+         }
       }
    }
 }
