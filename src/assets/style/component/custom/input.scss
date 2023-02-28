@@ -1,7 +1,19 @@
 .custom-input {
-   @apply relative;
-   @apply my-2 px-2.5 py-0.5;
-   @apply border rounded-lg border-gray-300;
+   @apply my-2 px-2 py-0.5;
+
+   &__inner {
+      @apply relative;
+      @apply border rounded-lg border-gray-300;
+
+      &.error {
+         @apply border-red-500;
+      }
+   }
+
+   &__helper {
+      @apply mt-1;
+      @apply text-sm text-red-500;
+   }
 
    ion-label {
       @apply absolute -top-6 left-3;
@@ -11,6 +23,6 @@
    }
 
    ion-input {
-     @apply font-light;
+      @apply font-light;
    }
 }

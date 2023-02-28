@@ -8,6 +8,8 @@ import {
    IonButtons,
    IonButton,
    onIonViewWillEnter,
+   onIonViewWillLeave,
+   onIonViewDidLeave,
 } from '@ionic/vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -45,6 +47,10 @@ onIonViewWillEnter(() => {
    const { name, phone } = route.query
    customer.value.name = name as string
    customer.value.phone = phone as string
+})
+
+onIonViewDidLeave(() => {
+   console.log('pindah halaman')
 })
 /**
  * validate input when event triggered
@@ -105,22 +111,6 @@ async function validateInput(field: string) {
                <ion-row>
                   <ion-col>
                      <ion-button expand="block">Simpan</ion-button>
-                  </ion-col>
-               </ion-row>
-               <ion-row>
-                  <ion-col>
-                     <ion-label>nama : {{ customer.name }}</ion-label>
-                     <ion-label
-                        >is error : {{ errorState.name.isError }}</ion-label
-                     >
-                  </ion-col>
-               </ion-row>
-               <ion-row>
-                  <ion-col>
-                     <ion-label>no telepon : {{ customer.phone }}</ion-label>
-                     <ion-label
-                        >is error : {{ errorState.phone.isError }}</ion-label
-                     >
                   </ion-col>
                </ion-row>
             </ion-grid>
