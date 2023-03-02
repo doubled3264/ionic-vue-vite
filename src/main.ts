@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import { IonicVue, createAnimation } from '@ionic/vue'
 import { StatusBar, Style } from '@capacitor/status-bar'
+import axios from 'axios'
+import { terminal } from 'virtual:terminal'
 import router from './routes'
 import store from './store'
 import App from './App.vue'
@@ -27,11 +29,11 @@ import './theme/variables.css'
 /* custom style */
 import './assets/style/index.scss'
 
+axios.defaults.baseURL = import.meta.env.VITE_APIURL
+terminal.log(import.meta.env.VITE_CHECKMODE)
+
 const myAnimation = (baseEl: any, opts: any) => {
   const { enteringEl, leavingEl } = opts
-  console.log(baseEl)
-  console.log(enteringEl)
-  console.log(leavingEl)
   const enteringPage = createAnimation('entering-page-animation')
   const leavingPage = createAnimation('leaving-page-animation')
   return createAnimation('root-transition').addAnimation([
