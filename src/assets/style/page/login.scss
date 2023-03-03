@@ -1,0 +1,21 @@
+.login-page {
+   &__inner {
+      @apply w-10/12 mx-auto mt-28;
+
+      h3 {
+         @apply text-xl font-medium capitalize text-gray-500;
+         @apply text-center;
+      }
+   }
+
+   &__form {
+      @apply mt-10;
+
+      ion-row:last-child {
+         @apply mt-8;
+      }
+      ion-button {
+         @apply text-base font-medium capitalize;
+      }
+   }
+}

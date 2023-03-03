@@ -30,28 +30,30 @@ import './theme/variables.css'
 import './assets/style/index.scss'
 
 axios.defaults.baseURL = import.meta.env.VITE_APIURL
+axios.defaults.headers.post['Content-Type'] =
+   'application/x-www-form-urlencoded'
 terminal.log(import.meta.env.VITE_CHECKMODE)
 
 const myAnimation = (baseEl: any, opts: any) => {
-  const { enteringEl, leavingEl } = opts
-  const enteringPage = createAnimation('entering-page-animation')
-  const leavingPage = createAnimation('leaving-page-animation')
-  return createAnimation('root-transition').addAnimation([
-    enteringPage,
-    leavingPage,
-  ])
+   const { enteringEl, leavingEl } = opts
+   const enteringPage = createAnimation('entering-page-animation')
+   const leavingPage = createAnimation('leaving-page-animation')
+   return createAnimation('root-transition').addAnimation([
+      enteringPage,
+      leavingPage,
+   ])
 }
 
 const app = createApp(App)
-  .use(IonicVue, {
-    animated: true,
-    navAnimation: myAnimation,
-  })
-  .use(router)
-  .use(store)
+   .use(IonicVue, {
+      animated: true,
+      navAnimation: myAnimation,
+   })
+   .use(router)
+   .use(store)
 
 router.isReady().then(() => {
-  app.mount('#app')
+   app.mount('#app')
 })
 
 /* Change status bar color */

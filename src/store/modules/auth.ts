@@ -18,14 +18,15 @@ export default {
   state: {
     admin: null,
     token: null,
+    isAuthorize: false,
   },
   getters: {
     admin: (state: State) => {
-      return state.admin && state.token
+      return state.admin
     },
   },
   mutations: {
-    admin: (state: State, data: any) => {
+    setAdmin: (state: State, data: any) => {
       state.admin = data
     },
     token: (state: State, data: any) => {
@@ -37,17 +38,17 @@ export default {
 
     // },
     async getAccess({ commit }: any, token: string) {
-      setAxiosHeader(token)
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
+        setAxiosHeader(token)
         axios
           .get('auth/admin-info')
           .then((response) => {
-            commit('user', response.data.data.adminData)
-            resolve(response)
+            commit('setAdmin', response.data.data.adminData)
+            resolve()
           })
           .catch((err) => {
             console.log(err)
-            reject(err)
+            reject()
           })
       })
     },

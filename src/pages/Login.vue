@@ -1,13 +1,93 @@
 <script setup lang="ts">
-import { IonPage, IonContent, onIonViewWillEnter } from '@ionic/vue'
+import {
+  IonPage,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonLabel,
+  IonButton,
+  onIonViewWillEnter,
+} from '@ionic/vue'
 import { terminal } from 'virtual:terminal'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import CustomInput from '../components/custom/Input.vue'
+import * as authSchema from '../utils/validation/auth'
 
-onIonViewWillEnter(() => {
-   terminal.log('print on terminal')
+type ErrorState = {
+  email: {
+    isError: boolean
+    message: string
+  }
+  password: {
+    isError: boolean
+    message: string
+  }
+}
+
+const router = useRouter()
+const credentials = ref({
+  email: '',
+  password: '',
 })
+const errorState = ref<ErrorState>({
+  email: {
+    isError: false,
+    message: '',
+  },
+  password: {
+    isError: false,
+    message: '',
+  },
+})
+onIonViewWillEnter(() => {
+  terminal.log('print on terminal')
+})
+
+/**
+ * validate input when event triggered
+ * @param {String} field
+ */
+async function validateInput(field: string) {
+  await authSchema.login
+    .validateAt(field, credentials.value)
+    .then(() => {
+      errorState.value[field as keyof ErrorState].isError = false
+    })
+    .catch((err) => {
+      errorState.value[field as keyof ErrorState].isError = true
+      errorState.value[field as keyof ErrorState].message = err.message
+    })
+}
 </script>
 <template>
-   <ion-page class="login-page">
-      <ion-content> Login Page </ion-content>
-   </ion-page>
+  <ion-page class="login-page">
+    <ion-content>
+      <div class="login-page__inner">
+        <h3>login terlebih dahulu.</h3>
+        <div class="login-page__form">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <custom-input label="email" v-model:input-value="credentials.email" :error-state="errorState.email"
+                  @validate-input="validateInput('email')"></custom-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <custom-input label="password" v-model:input-value="credentials.password"
+                  :error-state="errorState.password" @validate-input="validateInput('password')"></custom-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="block">masuk</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    </ion-content>
+  </ion-page>
 </template>
