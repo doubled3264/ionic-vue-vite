@@ -1,12 +1,14 @@
 import axios from 'axios'
+import terminal from 'virtual:terminal'
 
 type State = {
   admin: object
-  token: string
+  // token: string
 }
 
 function storeToken(token: string) {
   localStorage.setItem('token', token)
+  setAxiosHeader(token)
 }
 
 function setAxiosHeader(token: string) {
@@ -17,7 +19,7 @@ export default {
   namespaced: true,
   state: {
     admin: null,
-    token: null,
+    // token: null,
     isAuthorize: false,
   },
   getters: {
@@ -29,14 +31,27 @@ export default {
     setAdmin: (state: State, data: any) => {
       state.admin = data
     },
-    token: (state: State, data: any) => {
-      state.token = data
-    },
+    // setToken: (state: State, data: any) => {
+    //    state.token = data
+    // },
   },
   actions: {
-    // async login({commit}, credentials) {
-
-    // },
+    async login({ }: any, credentials: any) {
+      terminal.log(credentials)
+      // return new Promise<void>((resolve, reject) => {
+      //    axios
+      //       .post('auth/login', credentials)
+      //       .then((response) => {
+      //          storeToken(response.data.data.token)
+      //          // commit('setToken', response.data.data.token)
+      //          resolve()
+      //       })
+      //       .catch((err) => {
+      //          console.log(err)
+      //          reject(err)
+      //       })
+      // })
+    },
     async getAccess({ commit }: any, token: string) {
       return new Promise<void>((resolve, reject) => {
         setAxiosHeader(token)

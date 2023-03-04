@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { IonicVue, createAnimation } from '@ionic/vue'
 import { StatusBar, Style } from '@capacitor/status-bar'
+import VueSweetalert2 from 'vue-sweetalert2'
 import axios from 'axios'
 import { terminal } from 'virtual:terminal'
 import router from './routes'
@@ -25,7 +26,8 @@ import '@ionic/vue/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
-
+/* sweetalert2 style */
+import 'sweetalert2/dist/sweetalert2.min.css'
 /* custom style */
 import './assets/style/index.scss'
 
@@ -51,6 +53,7 @@ const app = createApp(App)
    })
    .use(router)
    .use(store)
+   .use(VueSweetalert2)
 
 router.isReady().then(() => {
    app.mount('#app')
