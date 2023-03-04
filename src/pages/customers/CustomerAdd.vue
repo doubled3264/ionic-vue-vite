@@ -17,6 +17,8 @@ import { back, diskette } from '../../utils/svg'
 import CustomIcon from '../../components/custom/Icon.vue'
 import CustomInput from '../../components/custom/Input.vue'
 import * as customerSchema from '../../utils/validation/customer'
+import { useStore } from 'vuex'
+import terminal from 'virtual:terminal'
 
 type ErrorState = {
    name: {
@@ -28,6 +30,7 @@ type ErrorState = {
       message: string
    }
 }
+const store = useStore()
 const route = useRoute()
 const customer = ref({
    name: '',
@@ -47,6 +50,7 @@ onIonViewWillEnter(() => {
    const { name, phone } = route.query
    customer.value.name = name as string
    customer.value.phone = phone as string
+   terminal.log(route.query)
 })
 
 onIonViewDidLeave(() => {

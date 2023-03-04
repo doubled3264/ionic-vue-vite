@@ -49,10 +49,11 @@ function toggleSearchContact() {
    }
    modal.value.searchContact = !modal.value.searchContact
 }
-function dismiss() {
-   /* modal.value.$el.dismiss() */
-   alert('maman racin')
-}
+
+function manualAdd() {
+    toggleAddOptions()
+    navigate('/customers/add')
+  }
 
 function navigate(path: string) {
    router.push({ path: path })
@@ -81,6 +82,7 @@ function navigate(path: string) {
             :is-open="modal.addOptions"
             @close-modal="toggleAddOptions"
             @serch-contact="toggleSearchContact"
+            @manual-add="manualAdd"
          ></add-options>
          <select-contact
             :is-open="modal.searchContact"

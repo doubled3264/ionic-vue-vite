@@ -38,19 +38,19 @@ export default {
   actions: {
     async login({ }: any, credentials: any) {
       terminal.log(credentials)
-      // return new Promise<void>((resolve, reject) => {
-      //    axios
-      //       .post('auth/login', credentials)
-      //       .then((response) => {
-      //          storeToken(response.data.data.token)
-      //          // commit('setToken', response.data.data.token)
-      //          resolve()
-      //       })
-      //       .catch((err) => {
-      //          console.log(err)
-      //          reject(err)
-      //       })
-      // })
+      return new Promise<void>((resolve, reject) => {
+         axios
+            .post('auth/login', credentials)
+            .then((response) => {
+               storeToken(response.data.data.token)
+               // commit('setToken', response.data.data.token)
+               resolve()
+            })
+            .catch((err) => {
+               console.log(err)
+               reject(err)
+            })
+      })
     },
     async getAccess({ commit }: any, token: string) {
       return new Promise<void>((resolve, reject) => {

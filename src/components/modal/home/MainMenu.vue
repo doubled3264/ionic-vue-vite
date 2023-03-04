@@ -15,14 +15,24 @@ import {
 import { Contacts } from '@capacitor-community/contacts'
 import { useRouter } from 'vue-router'
 import CustomIcon from '../../custom/Icon.vue'
-import { order, cross, user, bill, box, trolley } from '../../../utils/svg'
+import {
+   order,
+   cross,
+   user,
+   bill,
+   box,
+   trolley,
+   logout,
+} from '../../../utils/svg'
+import Swal from 'sweetalert2'
+import * as sweetalertDialog from '../../../utils/sweetalert-dialog'
 
 const props = defineProps({
    isOpen: Boolean,
 })
 const emit = defineEmits(['closeModal'])
 const router = useRouter()
-const contactList: any = ref([])
+/* const contactList: any = ref([]) */
 function closeModal() {
    if (props.isOpen) {
       emit('closeModal')
@@ -31,6 +41,17 @@ function closeModal() {
 function navigate(path: string) {
    closeModal()
    router.push({ path: path })
+}
+
+function signOut() {
+   Swal.fire(sweetalertDialog.confirm('Logout akun ?', 'Ya, logout')).then(
+      (result) => {
+         if (result.isConfirmed) {
+            localStorage.removeItem('token')
+            navigate('/login')
+         }
+      }
+   )
 }
 </script>
 <template>
@@ -82,6 +103,13 @@ function navigate(path: string) {
                <ion-item>
                   <custom-icon :svg-icon="box" width="20"></custom-icon>
                   <ion-label>daftar barang</ion-label>
+               </ion-item>
+            </ion-list>
+            <h3>akun</h3>
+            <ion-list lines="none">
+               <ion-item @click="signOut">
+                  <custom-icon :svg-icon="logout" width="20"></custom-icon>
+                  <ion-label>keluar</ion-label>
                </ion-item>
             </ion-list>
          </div>

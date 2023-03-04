@@ -25,7 +25,6 @@ function validateInput(event: any) {
    isTouched.value = true
    emit('update:inputValue', event.target.value)
    emit('validateInput')
-   terminal.log(props.inputMode)
 }
 </script>
 <template>

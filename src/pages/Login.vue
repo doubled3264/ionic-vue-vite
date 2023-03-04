@@ -86,12 +86,12 @@ async function validateForm() {
 async function signInAction() {
    terminal.log('signInAction run')
    await store.dispatch('auth/login', { ...credentials.value })
-   /* .then(() => { */
-   /*    router.push({ path: '/artikel' }) */
-   /* }) */
-   /* .catch(() => { */
-   /*    console.log('gagal') */
-   /* }) */
+   .then(() => {
+      router.push({ path: '/home' })
+   })
+   .catch(() => {
+      terminal.log('gagal')
+   })
 }
 </script>
 <template>

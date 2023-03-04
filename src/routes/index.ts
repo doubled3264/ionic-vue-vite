@@ -13,11 +13,6 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-   // localStorage.setItem(
-   //    'token',
-   //    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxR1RERVMwQ0FHWkhTV0NTOTRNMkJSUFo4IiwibmFtYSI6ImRlZGUgYWd1cyBzZXRpYXdhbiIsInJvbGUiOiJzdXBlciIsImlhdCI6MTY3NzgwNDY0OSwiZXhwIjoxNjc3ODkxMDQ5fQ.8q4fJ3ZnoqLO7MbiFduHs-I0uY9oQcdw7LVQLDGxt0U'
-   // )
-   // const token = localStorage.getItem('token')
    let isAuthenticated = false
    let role = ''
    let isPublic = last(to.matched)!.meta.public

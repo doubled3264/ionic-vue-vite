@@ -47,7 +47,7 @@ async function fetchContact() {
          contactList.value.push({
             id: contact.contactId,
             name: contact.name?.display,
-            phone: cleanPhoneNumber(contact.phones?.[0]?.number),
+            phone: cleanPhoneNumber(contact.phones.[0].number!),
          })
       }
    }

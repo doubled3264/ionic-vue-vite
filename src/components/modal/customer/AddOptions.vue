@@ -4,7 +4,7 @@ import { IonModal, IonList, IonItem, IonLabel } from '@ionic/vue'
 const props = defineProps({
    isOpen: Boolean,
 })
-const emit = defineEmits(['closeModal', 'serchContact'])
+const emit = defineEmits(['closeModal', 'serchContact', 'manualAdd'])
 
 function closeModal() {
    if (props.isOpen) {
