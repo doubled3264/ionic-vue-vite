@@ -29,7 +29,7 @@ function closeModal() {
             >
                <p>Pilih dari kontak</p>
             </ion-item>
-            <ion-item :button="true" :detail="false" @click="">
+            <ion-item :button="true" :detail="false" @click="emit('manualAdd')">
                <p>Tambahkan manual</p>
             </ion-item>
          </ion-list>

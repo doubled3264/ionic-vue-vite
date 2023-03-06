@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import {
-   IonHeader,
-   IonPage,
-   IonToolbar,
-   IonButtons,
-   IonButton,
-   IonTitle,
-   IonContent,
-   IonModal,
-   IonLabel,
-   IonImg,
-   IonAvatar,
-   IonList,
-   IonItem,
-   onIonViewWillEnter,
-   onIonViewDidEnter,
+  IonHeader,
+  IonPage,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonTitle,
+  IonContent,
+  IonModal,
+  IonLabel,
+  IonImg,
+  IonAvatar,
+  IonList,
+  IonItem,
+  onIonViewWillEnter,
+  onIonViewDidEnter,
+  useBackButton,
 } from '@ionic/vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -23,71 +24,80 @@ import AddOptions from '../../components/modal/customer/AddOptions.vue'
 import SelectContact from '../../components/modal/customer/SelectContact.vue'
 import CustomIcon from '../../components/custom/Icon.vue'
 import { back, plus } from '../../utils/svg'
+import terminal from 'virtual:terminal'
+import * as pageNavigation from '../../utils/page-navigation'
 
 /* const store = useStore() */
-/* const page = 'pelanggan' */
+const pageName = 'customer list'
 const router = useRouter()
 const modal = ref({
-   addOptions: false,
-   searchContact: false,
+  addOptions: false,
+  searchContact: false,
 })
 /* const bottomNavigationItem = ref([]) */
 
+useBackButton(10, (processNextHandler) => {
+  terminal.log(`backbutton pressed from ${pageName}`)
+  if (pageNavigation.getActive() == pageName) {
+    router.back()
+  } else {
+    processNextHandler()
+  }
+})
 onIonViewWillEnter(() => {
-   /* store.commit('bottomNavigation/turnOffAll') */
-   /* store.commit('bottomNavigation/turnOn', page) */
-   /* bottomNavigationItem.value = store.getters['bottomNavigation/getItem'] */
+  terminal.log(`${pageName} is rendered.`)
+  pageNavigation.setToActive(pageName)
+  terminal.log(`${pageNavigation.getActive()} is active`)
 })
 
 function toggleAddOptions() {
-   modal.value.addOptions = !modal.value.addOptions
+  modal.value.addOptions = !modal.value.addOptions
 }
 
 function toggleSearchContact() {
-   if (modal.value.addOptions) {
-      toggleAddOptions()
-   }
-   modal.value.searchContact = !modal.value.searchContact
+  if (modal.value.addOptions) {
+    toggleAddOptions()
+  }
+  modal.value.searchContact = !modal.value.searchContact
+}
+
+function addFromContact(credentials: any) {
+  router.push({ path: '/customers/add', query: { ...credentials } })
+  /* navigate('/customers/add') */
 }
 
 function manualAdd() {
-    toggleAddOptions()
-    navigate('/customers/add')
-  }
+  toggleAddOptions()
+  navigate('/customers/add')
+}
 
 function navigate(path: string) {
-   router.push({ path: path })
+  router.push({ path: path })
 }
 </script>
 
 <template>
-   <ion-page class="customers-list-page">
-      <ion-header class="ion-no-border">
-         <ion-toolbar mode="ios">
-            <ion-title>pelanggan</ion-title>
-            <ion-buttons slot="start">
-               <ion-button @click="navigate('/home')">
-                  <custom-icon :svg-icon="back" width="26"></custom-icon>
-               </ion-button>
-            </ion-buttons>
-            <ion-buttons slot="end">
-               <ion-button @click="toggleAddOptions">
-                  <custom-icon :svg-icon="plus" width="26"></custom-icon>
-               </ion-button>
-            </ion-buttons>
-         </ion-toolbar>
-      </ion-header>
-      <ion-content>
-         <add-options
-            :is-open="modal.addOptions"
-            @close-modal="toggleAddOptions"
-            @serch-contact="toggleSearchContact"
-            @manual-add="manualAdd"
-         ></add-options>
-         <select-contact
-            :is-open="modal.searchContact"
-            @close-modal="toggleSearchContact"
-         ></select-contact>
-      </ion-content>
-   </ion-page>
+  <ion-page class="customers-list-page">
+    <ion-header class="ion-no-border">
+      <ion-toolbar mode="ios">
+        <ion-title>pelanggan</ion-title>
+        <ion-buttons slot="start">
+          <ion-button @click="router.back">
+            <custom-icon :svg-icon="back" width="26"></custom-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button @click="toggleAddOptions">
+            <custom-icon :svg-icon="plus" width="26"></custom-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <add-options :is-open="modal.addOptions" @close-modal="toggleAddOptions" @serch-contact="toggleSearchContact"
+        @manual-add="manualAdd"></add-options>
+      <select-contact :is-open="modal.searchContact" @close-modal="toggleSearchContact"
+        @process-contact="addFromContact"></select-contact>
+    </ion-content>
+  </ion-page>
 </template>
