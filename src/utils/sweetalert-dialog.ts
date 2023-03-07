@@ -7,6 +7,15 @@ const dangerButton = {
   cancelButton: 'btn btn--md btn__link--secondary',
   confirmButton: 'btn btn--md btn--danger',
 }
+export const success = (text: string): SweetAlertOptions => {
+  return {
+    icon: 'success',
+    text: text,
+    showConfirmButton: false,
+    timer: 1500,
+    heightAuto: false,
+  }
+}
 
 export const error = (text: string): SweetAlertOptions => {
   return {
@@ -18,7 +27,10 @@ export const error = (text: string): SweetAlertOptions => {
   }
 }
 
-export const confirm = (text:string, confirmButtonText: string): SweetAlertOptions => {
+export const confirm = (
+  text: string,
+  confirmButtonText: string
+): SweetAlertOptions => {
   return {
     title: 'Anda yakin ?',
     text: text,

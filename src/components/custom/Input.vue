@@ -7,6 +7,7 @@ interface IProps {
    inputValue: string
    inputMode?: any
    errorState: {
+      optional?: boolean
       isError: boolean
       message: string
    }

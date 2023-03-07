@@ -35,9 +35,10 @@ ion-modal.modal-add-options {
 
    &__item {
       @apply flex items-center justify-between;
-      @apply w-full;
-      @apply py-2;
+      @apply w-full my-2 py-2.5 pl-2.5;
       @apply text-gray-500;
+      @apply border-2 rounded-lg border-gray-100;
+      @apply shadow-sm;
 
       h3 {
          @apply text-lg font-medium;
