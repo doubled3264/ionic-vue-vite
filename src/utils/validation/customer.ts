@@ -9,7 +9,7 @@ export const add = object().shape(
       is: (value: string) => value.length > 0,
       then: (schema) =>
         schema
-          .min(12, 'Minimal 12 karakter.')
+          .min(11, 'Minimal 11 karakter.')
           .max(13, 'Maksimal 13 karakter.')
           .matches(/^[0-9]+$/, 'No telepon tidak valid.')
           .required()

@@ -10,16 +10,13 @@ import {
   IonList,
   IonItem,
   onIonViewWillEnter,
-  onIonViewDidEnter,
   useBackButton,
 } from '@ionic/vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import AddOptions from '../../components/modal/customer/AddOptions.vue'
-import SelectContact from '../../components/modal/customer/SelectContact.vue'
 import CustomIcon from '../../components/custom/Icon.vue'
-import { back, phoneBook, plus, threeDots } from '../../utils/svg'
+import { back, phoneBook, plus } from '../../utils/svg'
 import terminal from 'virtual:terminal'
 import * as pageNavigation from '../../utils/page-navigation'
 
@@ -40,10 +37,10 @@ const modal = ref({
 })
 /* const bottomNavigationItem = ref([]) */
 
-useBackButton(10, (processNextHandler) => {
+useBackButton(9, (processNextHandler) => {
   terminal.log(`backbutton pressed from ${pageName}`)
   if (pageNavigation.getActive() == pageName) {
-    router.back()
+    navigate('/home')
   } else {
     processNextHandler()
   }
@@ -61,28 +58,8 @@ async function fetchCustomerList() {
   customerList.value = store.getters['customer/getCustomerList']
 }
 
-function toggleAddOptions() {
-  modal.value.addOptions = !modal.value.addOptions
-}
-
-function toggleSearchContact() {
-  if (modal.value.addOptions) {
-    toggleAddOptions()
-  }
-  modal.value.searchContact = !modal.value.searchContact
-}
-
-function addFromContact(credentials: any) {
-  router.push({ path: '/customers/add', query: { ...credentials } })
-  /* navigate('/customers/add') */
-}
-
-function manualAdd() {
-  toggleAddOptions()
-  navigate('/customers/add')
-}
-
 function navigate(path: string) {
+  terminal.log(path)
   router.push({ path: path })
 }
 </script>
@@ -91,9 +68,9 @@ function navigate(path: string) {
   <ion-page class="customers-list-page">
     <ion-header class="ion-no-border">
       <ion-toolbar mode="ios">
-        <ion-title>pelanggan</ion-title>
+        <ion-title>daftar pelanggan</ion-title>
         <ion-buttons slot="start">
-          <ion-button @click="router.back">
+          <ion-button @click="navigate('/home')">
             <custom-icon :svg-icon="back" width="26"></custom-icon>
           </ion-button>
         </ion-buttons>
@@ -106,30 +83,17 @@ function navigate(path: string) {
     </ion-header>
     <ion-content>
       <ion-list lines="none">
-        <ion-item v-for="(item, index) in customerList" :key="index + 1">
+        <ion-item v-for="(item, index) in customerList" :key="index + 1" @click="navigate(`/customers/${item.id}`)">
           <div class="customer-list__item">
-            <div class="customer-list__info" @click="terminal.log('click from item')">
+            <div class="customer-list__info">
               <h3>{{ item.name }}</h3>
               <p>
-                <span><custom-icon :svg-icon="phoneBook" width="16" /></span>{{ item.phone }}
-              <p>{{ item.phone_number }}</p>
+                <span><custom-icon :svg-icon="phoneBook" width="16" /></span>{{ item.phone_number }}
               </p>
-            </div>
-            <div class="customer-list__nav">
-              <ion-buttons>
-                <ion-button @click="">
-                  <custom-icon :svg-icon="threeDots" width="26">
-                  </custom-icon>
-                </ion-button>
-              </ion-buttons>
             </div>
           </div>
         </ion-item>
       </ion-list>
-      <add-options :is-open="modal.addOptions" @close-modal="toggleAddOptions" @serch-contact="toggleSearchContact"
-        @manual-add="manualAdd"></add-options>
-      <select-contact :is-open="modal.searchContact" @close-modal="toggleSearchContact"
-        @process-contact="addFromContact"></select-contact>
     </ion-content>
   </ion-page>
 </template>

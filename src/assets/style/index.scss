@@ -16,6 +16,9 @@
 
 body {
    font-family: 'Rubik', sans-serif;
+   svg {
+      // @apply inline;
+   }
 }
 .tab-menu__item {
    --ripple-color: transparent;

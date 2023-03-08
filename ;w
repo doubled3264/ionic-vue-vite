@@ -50,22 +50,6 @@
    &__inner {
       // --background: #2867b2;
    }
-
-   &.popover {
-      --offset-y: -375px;
-      --offset-x: 20px;
-      --width: max-content;
-   }
-   &.popover__inner {
-      ion-col {
-         @apply flex gap-3 items-center;
-         @apply text-gray-500;
-      }
-      p {
-         @apply py-1;
-         @apply text-base font-medium capitalize;
-      }
-   }
    &__info {
       @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
       @apply rounded-md shadow-md bg-lapis-lazuli;
@@ -77,7 +61,7 @@
 
       p {
          @apply flex gap-2;
-         @apply mt-2.5;
+         @apply mt-2;
          @apply text-xl font-medium text-white;
       }
    }
