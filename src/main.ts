@@ -34,7 +34,8 @@ import './assets/style/index.scss'
 axios.defaults.baseURL = import.meta.env.VITE_APIURL
 axios.defaults.headers.post['Content-Type'] =
    'application/x-www-form-urlencoded'
-terminal.log(import.meta.env.VITE_CHECKMODE)
+terminal.log(`mode : ${ import.meta.env.VITE_CHECKMODE }`)
+terminal.log(`URL for api : ${ import.meta.env.VITE_APIURL }`)
 
 const myAnimation = (baseEl: any, opts: any) => {
    const { enteringEl, leavingEl } = opts

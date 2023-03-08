@@ -105,9 +105,7 @@ function navigate(contactId: string) {
   <ion-modal ref="modal" :is-open="isOpen" @didDismiss="closeModal" @didPresent="fetchContact"
     :initial-breakpoint="0.75" class="modal-search-contact">
     <ion-header class="ion-no-border">
-      <ion-toolbar>
-        <ion-searchbar :debounce="1000" @ionChange="handleChange" placeholder="Masukan nama"></ion-searchbar>
-      </ion-toolbar>
+        <ion-searchbar class="modal-search-contact searchbar" show-clear-button="focus" :debounce="800" @ionChange="handleChange" placeholder="Masukan nama"></ion-searchbar>
     </ion-header>
     <ion-content>
       <ion-list lines="none">

@@ -36,7 +36,7 @@ function editAction() {
                   <p>ubah data</p>
                </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row v-show="false">
                <ion-col>
                   <custom-icon :svg-icon="trash" width="20" />
                   <p>arsipkan data</p>

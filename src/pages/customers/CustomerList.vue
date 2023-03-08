@@ -59,7 +59,6 @@ async function fetchCustomerList() {
 }
 
 function navigate(path: string) {
-  terminal.log(path)
   router.push({ path: path })
 }
 </script>

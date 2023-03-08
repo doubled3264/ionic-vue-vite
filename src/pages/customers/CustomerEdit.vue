@@ -140,7 +140,7 @@ async function editCustomer() {
       .dispatch('customer/edit', customerData)
       .then(() => {
          Swal.fire(sweetalertDialog.success('Kontak berhasil diubah.'))
-         navigate(`/customers/${customerId}`)
+         navigate(`/customers/${customerId.value}`)
       })
       .catch((err) => {
          terminal.log(err.response)

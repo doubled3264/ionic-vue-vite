@@ -55,8 +55,10 @@ onIonViewWillEnter(() => {
 })
 
 async function fetchCustomer() {
+  terminal.log(`params id: ${route.params.id}`)
    await store.dispatch('customer/getOne', route.params.id)
    customer.value = store.getters['customer/getCustomerDetail']
+   terminal.log(store.getters['customer/getCustomerDetail'])
 }
 
 async function togglePopOverOptions(ev: any) {
