@@ -198,6 +198,11 @@ async function saveCustomer() {
                 :error-state="errorState.phone_number" @validate-input="validateInput('phone_number')"></custom-input>
             </ion-col>
           </ion-row>
+          <ion-row class="form-helper">
+            <ion-col>
+              <p>* boleh dikosongkan.</p>
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col>
               <ion-button expand="block" @click="validateForm">Simpan</ion-button>

@@ -1,0 +1,21 @@
+.product-add-page {
+   &__inner {
+      @apply mt-4;
+      ion-row:last-child {
+         @apply mt-4;
+      }
+      ion-button {
+         --background: #2867b2;
+         --border-radius: 8px;
+         --padding-top: 24px;
+         --padding-bottom: 24px;
+      }
+
+      .form-helper {
+         p {
+            @apply pl-2;
+            @apply text-sm text-gray-400;
+         }
+      }
+   }
+}

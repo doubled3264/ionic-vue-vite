@@ -10,6 +10,13 @@
          --padding-top: 24px;
          --padding-bottom: 24px;
       }
+
+      .form-helper {
+         p {
+            @apply pl-2;
+            @apply text-sm text-gray-400;
+         }
+      }
    }
 }
 

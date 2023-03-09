@@ -100,7 +100,7 @@ function signOut() {
             </ion-list>
             <h3>barang</h3>
             <ion-list lines="none">
-               <ion-item>
+               <ion-item @click="navigate('/products')">
                   <custom-icon :svg-icon="box" width="20"></custom-icon>
                   <ion-label>daftar barang</ion-label>
                </ion-item>
