@@ -22,6 +22,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2'
 import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 import * as productSchema from '../../utils/validation/product'
 import { useStore } from 'vuex'
+import terminal from 'virtual:terminal'
 
 interface IProduct {
   name: string
@@ -146,6 +147,14 @@ async function saveNewProduct() {
   }
 
   store.dispatch('product/addNew', productData)
+    .then(() => {
+      Swal.fire(sweetalertDialog.success('Barang berhasil disimpan.'))
+      navigate('/products')
+    })
+    .catch((err) => {
+      terminal.log(err.response)
+      Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
+    })
 }
 </script>
 <template>
@@ -171,20 +180,20 @@ async function saveNewProduct() {
           </ion-row>
           <ion-row>
             <ion-col>
-              <custom-input label="harga modal *" v-model:input-value="product.purchase_price"
+              <custom-input label="harga modal *" input-mode="numeric" v-model:input-value="product.purchase_price"
                 :error-state="errorState.purchase_price"
                 @validate-input="validateInput('purchase_price')"></custom-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <custom-input label="harga jual" v-model:input-value="product.selling_price"
+              <custom-input label="harga jual" input-mode="numeric" v-model:input-value="product.selling_price"
                 :error-state="errorState.selling_price" @validate-input="validateInput('selling_price')"></custom-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <custom-input label="harga reseller *" v-model:input-value="product.reseller_price"
+              <custom-input label="harga reseller *" input-mode="numeric" v-model:input-value="product.reseller_price"
                 :error-state="errorState.reseller_price"
                 @validate-input="validateInput('reseller_price')"></custom-input>
             </ion-col>
