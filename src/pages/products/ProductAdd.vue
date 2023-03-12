@@ -132,7 +132,7 @@ async function validateForm() {
     }
   }
   Swal.fire(
-    sweetalertDialog.confirm('Kontak akan disimpan.', 'Ya simpan.')
+    sweetalertDialog.confirm('Produk akan disimpan.', 'Ya simpan.')
   ).then(async (result) => {
     if (result.isConfirmed) {
       await saveNewProduct()
@@ -148,7 +148,7 @@ async function saveNewProduct() {
 
   store.dispatch('product/addNew', productData)
     .then(() => {
-      Swal.fire(sweetalertDialog.success('Barang berhasil disimpan.'))
+      Swal.fire(sweetalertDialog.success('Produk berhasil disimpan.'))
       navigate('/products')
     })
     .catch((err) => {
