@@ -1,0 +1,35 @@
+.custom-radio {
+   @apply my-2 px-2 py-0.5;
+   &__inner {
+      & > ion-label {
+         @apply px-5;
+      }
+      ion-list {
+         @apply flex;
+         ion-radio-group {
+            @apply flex;
+            ion-item {
+               --background-hover: transparent;
+               --ripple-color: transparent;
+
+               ion-radio {
+                  @apply mr-4;
+               }
+               ion-label {
+                  @apply text-gray-500 #{!important};
+               }
+            }
+         }
+      }
+
+      ion-label {
+         @apply font-medium capitalize text-gray-500;
+      }
+   }
+   &__item {
+      // @apply mt-4;
+      ion-col {
+         @apply flex gap-2;
+      }
+   }
+}

@@ -9,34 +9,41 @@ import {
   IonContent,
   IonList,
   IonItem,
+  IonRadio,
+  IonRadioGroup,
   onIonViewWillEnter,
   useBackButton,
 } from '@ionic/vue'
 import CustomInput from '../../components/custom/Input.vue'
+import CustomRadio from '../../components/custom/Radio.vue'
 import CustomIcon from '../../components/custom/Icon.vue'
 import { back, phoneBook, plus } from '../../utils/svg'
 import * as pageNavigation from '../../utils/page-navigation'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import Swal, { SweetAlertOptions } from 'sweetalert2'
 import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 import * as productSchema from '../../utils/validation/product'
 import { useStore } from 'vuex'
 import terminal from 'virtual:terminal'
 
-interface IProduct {
-  name: string
-  purchase_price: number
-  selling_price: number
-  reseller_price: number
-}
+/* interface IProduct { */
+/*   name: string */
+/*   purchase_price: number */
+/*   selling_price: number */
+/*   reseller_price: number */
+/* } */
 
 interface IErrorState {
   name: {
     isError: boolean
     message: string
   }
-  purchase_price: {
+  /* purchase_price: { */
+  /*    isError: boolean */
+  /*    message: string */
+  /* } */
+  portion_type: {
     isError: boolean
     message: string
   }
@@ -44,7 +51,11 @@ interface IErrorState {
     isError: boolean
     message: string
   }
-  reseller_price: {
+  /* reseller_price: { */
+  /*    isError: boolean */
+  /*    message: string */
+  /* } */
+  weight: {
     isError: boolean
     message: string
   }
@@ -56,16 +67,22 @@ const pageName = 'product add'
 const admin: any = ref()
 const product = ref({
   name: '',
-  purchase_price: '',
+  /* purchase_price: '', */
+  portion_type: 'satuan',
   selling_price: '',
-  reseller_price: '',
+  /* reseller_price: '', */
+  weight: '',
 })
 const errorState = ref<IErrorState>({
   name: {
     isError: true,
     message: '',
   },
-  purchase_price: {
+  /* purchase_price: { */
+  /*    isError: false, */
+  /*    message: '', */
+  /* }, */
+  portion_type: {
     isError: false,
     message: '',
   },
@@ -73,7 +90,11 @@ const errorState = ref<IErrorState>({
     isError: true,
     message: '',
   },
-  reseller_price: {
+  /* reseller_price: { */
+  /*    isError: false, */
+  /*    message: '', */
+  /* }, */
+  weight: {
     isError: false,
     message: '',
   },
@@ -98,6 +119,15 @@ function getAdminInfo() {
 function navigate(path: string) {
   router.push({ path: path })
 }
+const toggleWeightInput = computed(() => {
+  validateInput('weight')
+  if (product.value.portion_type == 'satuan') {
+    product.value.weight = ''
+    return false
+  } else {
+    return true
+  }
+})
 
 /**
  * validate input when event triggered
@@ -113,6 +143,7 @@ async function validateInput(field: string) {
       errorState.value[field as keyof IErrorState].isError = true
       errorState.value[field as keyof IErrorState].message = err.message
     })
+  console.log(errorState.value)
 }
 
 /**
@@ -146,7 +177,8 @@ async function saveNewProduct() {
     ...product.value,
   }
 
-  store.dispatch('product/addNew', productData)
+  store
+    .dispatch('product/addNew', productData)
     .then(() => {
       Swal.fire(sweetalertDialog.success('Produk berhasil disimpan.'))
       navigate('/products')
@@ -180,22 +212,20 @@ async function saveNewProduct() {
           </ion-row>
           <ion-row>
             <ion-col>
-              <custom-input label="harga modal *" input-mode="numeric" v-model:input-value="product.purchase_price"
-                :error-state="errorState.purchase_price"
-                @validate-input="validateInput('purchase_price')"></custom-input>
+              <custom-radio label="jenis porsi" :items="['satuan', 'gram']"
+                v-model:input-value="product.portion_type"></custom-radio>
+            </ion-col>
+          </ion-row>
+          <ion-row v-show="toggleWeightInput">
+            <ion-col>
+              <custom-input label="berat" input-mode="numeric" v-model:input-value="product.weight"
+                :error-state="errorState.weight" @validate-input="validateInput('weight')"></custom-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
               <custom-input label="harga jual" input-mode="numeric" v-model:input-value="product.selling_price"
                 :error-state="errorState.selling_price" @validate-input="validateInput('selling_price')"></custom-input>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <custom-input label="harga reseller *" input-mode="numeric" v-model:input-value="product.reseller_price"
-                :error-state="errorState.reseller_price"
-                @validate-input="validateInput('reseller_price')"></custom-input>
             </ion-col>
           </ion-row>
           <ion-row class="form-helper">

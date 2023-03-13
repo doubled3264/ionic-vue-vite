@@ -3,61 +3,86 @@ import { pick } from '../../utils/object-helper'
 import terminal from 'virtual:terminal'
 
 interface IProductList {
-  id: string
-  name: string
-  selling_price: number
+   id: string
+   name: string
+   selling_price: number
 }
 
 interface IState {
-  productList: Array<IProductList>
+   productList: Array<IProductList>
+   productDetail: object
 }
 
 export default {
-  namespaced: true,
-  state: {
-    productList: [],
-  },
-  getters: {},
-  mutations: {
-    setProductList: (state: IState, data: any) => {
-      state.productList = []
-      terminal.log(data)
-      for (const productItem of data) {
-        state.productList.push({
-          ...pick(productItem, 'id', 'name'),
-          ...pick(
-            productItem.ProductPortion.ProductSellingPrice,
-            'selling_price'
-          ),
-        })
-      }
-      terminal.log(state.productList)
-    },
-  },
-  actions: {
-    async addNew({ }, productData: any) {
-      terminal.log(productData)
-      return new Promise<void>((resolve, reject) => {
-        axios
-          .post('product', productData)
-          .then(() => {
-            resolve()
-          })
-          .catch((err) => {
-            console.log(err)
-            reject(err)
-          })
-      })
-    },
-    async getAll({ commit }: any) {
-      await axios
-        .get('product')
-        .then((response) => {
-          commit('setProductList', response.data.data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-  },
+   namespaced: true,
+   state: {
+      productList: [],
+      productDetail: {},
+   },
+   getters: {
+      getProductList: (state: IState) => {
+         return state.productList
+      },
+      getProductDetail: (state: IState) => {
+         return state.productDetail
+      },
+   },
+   mutations: {
+      setProductList: (state: IState, data: any) => {
+         state.productList = []
+         for (const productItem of data) {
+            state.productList.push({
+               ...pick(productItem, 'id', 'name'),
+               ...pick(
+                  productItem.ProductPortion.ProductSellingPrice,
+                  'selling_price'
+               ),
+            })
+         }
+      },
+      setProductDetail: (state: IState, data: any) => {
+         terminal.log(data)
+         state.productDetail = {
+            ...pick(data, 'id', 'name', 'category', 'portion_type'),
+            // ...pick(data.ProductPortion.ProductSellingPrice, 'selling_price'),
+         }
+         state.productDetail = data
+      },
+   },
+   actions: {
+      async addNew({}, productData: any) {
+         terminal.log(productData)
+         return new Promise<void>((resolve, reject) => {
+            axios
+               .post('product', productData)
+               .then(() => {
+                  resolve()
+               })
+               .catch((err) => {
+                  console.log(err)
+                  reject(err)
+               })
+         })
+      },
+      async getAll({ commit }: any) {
+         await axios
+            .get('product')
+            .then((response) => {
+               commit('setProductList', response.data.data)
+            })
+            .catch((err) => {
+               console.log(err)
+            })
+      },
+      async getOne({ commit }: any, productId: string) {
+         await axios
+            .get(`product/${productId}`)
+            .then((response) => {
+               commit('setProductDetail', response.data.data)
+            })
+            .catch((err) => {
+               console.log(err)
+            })
+      },
+   },
 }

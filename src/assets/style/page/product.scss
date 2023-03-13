@@ -19,3 +19,38 @@
       }
    }
 }
+
+.product-list {
+   &__item {
+      @apply flex items-center;
+      @apply w-full my-2 py-2.5 px-2.5;
+      @apply text-gray-500;
+      @apply border-2 rounded-lg border-gray-100;
+      @apply shadow-sm;
+      h3,
+      p {
+         @apply text-base font-medium capitalize;
+      }
+      h3 {
+         @apply w-8/12;
+      }
+   }
+}
+
+.product-detail-page {
+   &__info {
+      @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
+      @apply rounded-md shadow-md bg-lapis-lazuli;
+
+      h3 {
+         @apply mt-4;
+         @apply text-xl font-medium capitalize text-white;
+      }
+
+      // p {
+      //    @apply flex gap-2;
+      //    @apply mt-2.5;
+      //    @apply text-xl font-medium text-white;
+      // }
+   }
+}

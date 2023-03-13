@@ -19,10 +19,13 @@ import * as pageNavigation from '../../utils/page-navigation'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import terminal from 'virtual:terminal'
+import { setToIDR } from '../../utils/formater'
 
 const store = useStore()
 const router = useRouter()
 const pageName = 'product list'
+const productList = ref()
 
 useBackButton(9, (processNextHandler) => {
    if (pageNavigation.getActive() == pageName) {
@@ -38,7 +41,9 @@ onIonViewWillEnter(() => {
 })
 
 async function fetchProductList() {
+   terminal.log('fetch data productList')
    await store.dispatch('product/getAll')
+   productList.value = store.getters['product/getProductList']
 }
 
 function navigate(path: string) {
@@ -62,5 +67,18 @@ function navigate(path: string) {
             </ion-buttons>
          </ion-toolbar>
       </ion-header>
+      <ion-content>
+         <ion-list lines="none">
+            <ion-item
+               v-for="(item, index) in productList"
+               @click="navigate(`/products/${item.id}`)"
+            >
+               <div class="product-list__item">
+                  <h3>{{ item.name }}</h3>
+                  <p>Rp {{ setToIDR(item.selling_price) }}</p>
+               </div>
+            </ion-item>
+         </ion-list>
+      </ion-content>
    </ion-page>
 </template>
