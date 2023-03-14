@@ -7,6 +7,7 @@ interface IProps {
   inputValue: string
   inputMode?: any
   type?: any
+  disabled?:any
   errorState: {
     optional?: boolean
     isError: boolean
@@ -20,7 +21,7 @@ const props = withDefaults(defineProps<IProps>(), {
   },
   type: {
     default: 'text'
-  }
+  },
 })
 
 const emit = defineEmits(['update:inputValue', 'validateInput'])
@@ -30,7 +31,6 @@ function validateInput(event: any) {
   isTouched.value = true
   emit('update:inputValue', event.target.value)
   emit('validateInput')
-  terminal.log(typeof event.target.value)
 }
 </script>
 <template>
@@ -40,7 +40,7 @@ function validateInput(event: any) {
   { error: errorState.isError && isTouched },
 ]">
       <ion-label position="stacked">{{ label }}</ion-label>
-      <ion-input :type="type" :value="inputValue" @ion-input="validateInput" :inputmode="inputMode"></ion-input>
+      <ion-input :disabled="disabled" :type="type" :value="inputValue" @ion-input="validateInput" :inputmode="inputMode"></ion-input>
     </div>
     <p class="custom-input__helper" v-show="errorState.isError && isTouched">
       {{ errorState.message }}

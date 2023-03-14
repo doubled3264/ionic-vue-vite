@@ -24,6 +24,7 @@ import { back, pencil } from '../../../utils/svg'
 import CustomInfo from '../../../components/custom/Info.vue'
 import terminal from 'virtual:terminal'
 import ModalEditName from '../../../components/modal/product/product-edit/Name.vue'
+import ModalEditCategory from '../../../components/modal/product/product-edit/Category.vue'
 
 interface IAdmin {
   id: string
@@ -39,6 +40,7 @@ const admin: IAdmin | any = ref()
 const pageName = 'product edit'
 const modal = ref({
   editName: false,
+  editCategory:false
 })
 const product = ref({
   id: '',
@@ -72,6 +74,10 @@ function toggleModalEditName() {
   modal.value.editName = !modal.value.editName
 }
 
+function toggleModalEditCategory() {
+  modal.value.editCategory = !modal.value.editCategory
+}
+
 async function fetchProduct() {
   await store.dispatch('product/getOne', route.params.id)
   product.value = store.getters['product/getProductDetail']
@@ -102,7 +108,7 @@ function navigate(path: string) {
               <custom-info label="nama produk" :item="product.name" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
-            <ion-item class="product-info__item">
+            <ion-item @click="toggleModalEditCategory">
               <custom-info label="kategori" :item="product.category" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
@@ -113,6 +119,7 @@ function navigate(path: string) {
         </div>
       </div>
       <modal-edit-name :is-open="modal.editName" @hide-modal="toggleModalEditName" :product-id="productId" />
+      <modal-edit-category :is-open="modal.editCategory" @hide-modal="toggleModalEditCategory" :product-id="productId" />
     </ion-content>
   </ion-page>
 </template>
