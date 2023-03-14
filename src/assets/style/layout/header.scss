@@ -7,7 +7,9 @@
 .customer-edit-page,
 .product-list-page,
 .product-add-page,
-.product-detail-page {
+.product-detail-page,
+.product-edit-page,
+.modal-edit-product {
    ion-toolbar {
       @apply text-white;
       --min-height: 52px;

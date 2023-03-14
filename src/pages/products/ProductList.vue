@@ -54,7 +54,7 @@ function navigate(path: string) {
    <ion-page class="product-list-page">
       <ion-header>
          <ion-toolbar mode="ios">
-            <ion-title>daftar barang</ion-title>
+            <ion-title>daftar produk</ion-title>
             <ion-buttons slot="start">
                <ion-button @click="navigate('/home')">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>

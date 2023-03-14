@@ -1,0 +1,12 @@
+.modal-edit-product {
+   &.name {
+      .inner {
+         @apply mt-6;
+
+         ion-button {
+            --background: #2867b2;
+            @apply text-base capitalize;
+         }
+      }
+   }
+}

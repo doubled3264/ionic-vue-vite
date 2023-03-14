@@ -89,6 +89,15 @@ const routes: Array<RouteRecordRaw> = [
           role: ['super', 'admin'],
         },
       },
+      {
+        path: 'edit/:id',
+        component: () =>
+          import('../pages/products/product-edit/ProductEdit.vue'),
+        meta: {
+          public: false,
+          role: ['super', 'admin'],
+        },
+      },
     ],
   },
   {

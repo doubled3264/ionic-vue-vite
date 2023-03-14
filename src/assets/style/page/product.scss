@@ -42,15 +42,57 @@
       @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
       @apply rounded-md shadow-md bg-lapis-lazuli;
 
-      h3 {
-         @apply mt-4;
-         @apply text-xl font-medium capitalize text-white;
+      .product-title {
+         @apply text-white;
+         h3 {
+            @apply mt-4;
+            @apply text-2xl font-medium capitalize;
+         }
+         p {
+            @apply text-lg;
+         }
       }
 
-      // p {
-      //    @apply flex gap-2;
-      //    @apply mt-2.5;
-      //    @apply text-xl font-medium text-white;
-      // }
+      .product-price {
+         @apply mt-2;
+         @apply text-white;
+         p {
+            @apply text-xl font-medium;
+
+            span {
+               @apply text-xs;
+            }
+         }
+      }
+   }
+}
+
+.product-edit-page {
+   &__inner {
+      @apply mt-6 px-4;
+
+      .product-info {
+         h3 {
+            @apply mt-3 mb-2;
+            @apply text-2xl font-medium capitalize text-gray-500;
+         }
+
+         ion-item {
+            --padding-start: 0;
+            @apply text-gray-500;
+            @apply relative;
+            svg {
+               @apply absolute right-0 bottom-3;
+            }
+         }
+      }
+
+      .product-price {
+         @apply mt-8;
+         h3 {
+            @apply mb-2;
+            @apply text-2xl font-medium capitalize text-gray-500;
+         }
+      }
    }
 }

@@ -1,0 +1,12 @@
+.custom-info {
+   @apply w-full my-2;
+   @apply text-gray-500;
+   ion-label {
+      p {
+         @apply text-xl font-medium capitalize;
+      }
+   }
+   & > p {
+      @apply text-xl capitalize;
+   }
+}

@@ -2,6 +2,7 @@
    @apply my-2 px-2 py-0.5;
 
    &__inner {
+      @apply px-1 py-1;
       @apply relative;
       @apply border rounded-lg border-gray-300;
 
@@ -16,8 +17,8 @@
    }
 
    ion-label {
-      @apply absolute -top-6 left-3;
-      @apply px-2;
+      @apply absolute -top-6 left-2;
+      @apply px-1;
       @apply text-xl font-medium capitalize text-gray-500;
       @apply bg-white;
    }

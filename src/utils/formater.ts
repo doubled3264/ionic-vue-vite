@@ -1,3 +1,5 @@
+import terminal from 'virtual:terminal'
+
 /**
  * transform value to IDR format
  * @param {string} value 100000
@@ -9,4 +11,13 @@ export const setToIDR = (value: number) => {
     minimumFractionDigits: 0,
   })
   return formatter.format(value)
+}
+
+export const setPricePerPortion = (portionType: string, portion: number) => {
+  terminal.log(`type: ${portionType}, portion: ${portion}`)
+  if (portionType == 'satuan') {
+    return `\/ pcs`
+  } else if (portionType == 'gram') {
+    return `\/ ${portion} gram`
+  }
 }

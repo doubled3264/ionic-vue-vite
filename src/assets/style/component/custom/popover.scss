@@ -1,0 +1,16 @@
+.custom-popover {
+   --offset-y: -375px;
+   --offset-x: 95px;
+   --width: 160px;
+
+   &__inner {
+      ion-col {
+         @apply flex gap-3 items-center;
+         @apply text-gray-500;
+         p {
+            @apply py-1;
+            @apply text-base font-medium capitalize;
+         }
+      }
+   }
+}
