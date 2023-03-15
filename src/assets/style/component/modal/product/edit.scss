@@ -5,7 +5,42 @@
 
          ion-button {
             --background: #2867b2;
+            --border-radius: 8px;
             @apply text-base capitalize;
+         }
+      }
+   }
+   &.category {
+      .inner {
+         @apply mt-8 px-3;
+
+         .form {
+            .button-nav {
+               @apply flex flex-col gap-2;
+               @apply mt-6;
+               ion-button {
+                  --background: #2867b2;
+                  --border-radius: 8px;
+                  @apply text-base capitalize;
+               }
+            }
+         }
+      }
+   }
+
+   &.price-option {
+      h3 {
+         @apply ml-4 mt-4;
+         // @apply text-xl font-medium capitalize text-gray-500;
+         @apply text-xl font-medium capitalize text-lapis-lazuli-normal;
+      }
+
+      ion-item {
+         --padding-start: 16px;
+         --padding-end: 16px;
+         @apply mb-2;
+         p {
+            @apply text-lg font-medium capitalize text-gray-500;
          }
       }
    }

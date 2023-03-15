@@ -1,11 +1,11 @@
 .modal-main-menu {
    ion-toolbar {
       ion-title {
-         @apply font-medium capitalize text-lapis-lazuli;
+         @apply font-medium capitalize text-lapis-lazuli-normal;
          @apply pl-2;
       }
       ion-button {
-         @apply text-lapis-lazuli;
+         @apply text-lapis-lazuli-normal;
       }
    }
 

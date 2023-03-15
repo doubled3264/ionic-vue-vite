@@ -1,0 +1,23 @@
+.custom-radio-v2 {
+   ion-toolbar {
+      @apply capitalize text-gray-500;
+      --padding-start: 16px;
+   }
+   &__inner {
+      @apply px-4;
+      h3 {
+         @apply ml-4 mt-4;
+         @apply text-xl font-medium capitalize text-lapis-lazuli-normal;
+      }
+      ion-list {
+         @apply mb-4;
+         ion-item {
+            --background-hover: transparent;
+            --ripple-color: transparent;
+            p {
+               @apply text-lg capitalize font-normal text-gray-500;
+            }
+         }
+      }
+   }
+}

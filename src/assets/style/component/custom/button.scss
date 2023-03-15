@@ -74,14 +74,23 @@
          @apply bg-warning-active #{!important};
       }
    }
+   &--verdigris {
+      @apply bg-verdi-normal border-verdi-normal #{!important};
+      &:hover {
+         @apply bg-verdi-hover border-verdi-hover #{!important};
+      }
+      &:active {
+         @apply bg-verdi-active border-verdi-active #{!important};
+      }
+   }
    &--lapis-lazuli {
-      @apply bg-lapis-lazuli border-lapis-lazuli #{!important};
-      // &:hover {
-      //    @apply bg-verdi-hover border-verdi-hover #{!important};
-      // }
-      // &:active {
-      //    @apply bg-verdi-active border-verdi-active #{!important};
-      // }
+      @apply bg-lapis-lazuli-normal border-lapis-lazuli-normal #{!important};
+      &:hover {
+         @apply bg-lapis-lazuli-hover border-lapis-lazuli-hover #{!important};
+      }
+      &:active {
+         @apply bg-lapis-lazuli-active border-lapis-lazuli-active #{!important};
+      }
    }
    &__outline--primary {
       @apply text-primary-normal;
@@ -131,6 +140,14 @@
          @apply bg-warning-normal;
       }
    }
+   &__outline--lapis-lazuli {
+      @apply text-lapis-lazuli-normal;
+      @apply border-lapis-lazuli-normal;
+      &:hover {
+         @apply text-white;
+         @apply bg-lapis-lazuli-normal;
+      }
+   }
    &__link--secondary {
       @apply text-secondary-normal;
       @apply border-none;
@@ -157,4 +174,3 @@
       @apply mx-0 #{!important};
    }
 }
-

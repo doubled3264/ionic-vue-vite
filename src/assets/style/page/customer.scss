@@ -36,7 +36,7 @@
       }
 
       &:visited {
-         @apply bg-lapis-lazuli;
+         @apply bg-lapis-lazuli-normal;
          @apply text-white;
 
          h3 {
@@ -75,7 +75,7 @@
    }
    &__info {
       @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
-      @apply rounded-md shadow-md bg-lapis-lazuli;
+      @apply rounded-md shadow-md bg-lapis-lazuli-normal;
 
       h3 {
          @apply mt-4;

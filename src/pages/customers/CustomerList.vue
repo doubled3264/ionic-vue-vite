@@ -31,11 +31,6 @@ const store = useStore()
 const router = useRouter()
 const pageName = 'customer list'
 const customerList = ref()
-const modal = ref({
-   addOptions: false,
-   searchContact: false,
-})
-/* const bottomNavigationItem = ref([]) */
 
 useBackButton(9, (processNextHandler) => {
    terminal.log(`backbutton pressed from ${pageName}`)
@@ -56,10 +51,9 @@ async function fetchCustomerList() {
 }
 
 const getPhoneNumber = computed(() => {
-  return (phoneNumber:string)=>{
-
-  return phoneNumber.length > 0 ? phoneNumber : '-'
-    }
+   return (phoneNumber: string) => {
+      return phoneNumber.length > 0 ? phoneNumber : '-'
+   }
 })
 
 function navigate(path: string) {
@@ -99,7 +93,7 @@ function navigate(path: string) {
                            ><custom-icon
                               :svg-icon="phoneBook"
                               width="16" /></span
-                        >{{getPhoneNumber(item.phone_number)}}
+                        >{{ getPhoneNumber(item.phone_number) }}
                      </p>
                   </div>
                </div>

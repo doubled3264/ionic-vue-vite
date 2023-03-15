@@ -23,7 +23,7 @@
 .product-list {
    &__item {
       @apply flex items-center;
-      @apply w-full my-2 py-2.5 px-2.5;
+      @apply w-full my-2 py-4 px-2.5;
       @apply text-gray-500;
       @apply border-2 rounded-lg border-gray-100;
       @apply shadow-sm;
@@ -40,7 +40,7 @@
 .product-detail-page {
    &__info {
       @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
-      @apply rounded-md shadow-md bg-lapis-lazuli;
+      @apply rounded-md shadow-md bg-lapis-lazuli-normal;
 
       .product-title {
          @apply text-white;
@@ -74,13 +74,17 @@
       .product-info {
          h3 {
             @apply mt-3 mb-2;
-            @apply text-2xl font-medium capitalize text-gray-500;
+            @apply text-2xl font-medium capitalize text-lapis-lazuli-normal;
          }
 
          ion-item {
-            --padding-start: 0;
-            @apply text-gray-500;
+            --padding-start: 12px;
+            --padding-end: 12px;
             @apply relative;
+            @apply mb-3;
+            @apply text-gray-500;
+            @apply border-2 border-gray-100 rounded-xl;
+            @apply shadow-md;
             svg {
                @apply absolute right-0 bottom-3;
             }
@@ -91,7 +95,20 @@
          @apply mt-8;
          h3 {
             @apply mb-2;
-            @apply text-2xl font-medium capitalize text-gray-500;
+            @apply text-2xl font-medium capitalize text-lapis-lazuli-normal;
+         }
+
+         ion-item {
+            --padding-start: 12px;
+            --padding-end: 12px;
+            @apply relative;
+            @apply mb-3;
+            @apply text-gray-500;
+            @apply border-2 border-gray-100 rounded-xl;
+            @apply shadow-md;
+            svg {
+               @apply absolute right-0 bottom-3;
+            }
          }
       }
    }
