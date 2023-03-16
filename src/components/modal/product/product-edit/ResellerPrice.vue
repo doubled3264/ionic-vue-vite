@@ -23,10 +23,11 @@ import * as pageNavigation from '../../../../utils/page-navigation'
 interface IProps {
    isOpen: boolean
    productId: string
+   purpose: string
 }
 
 interface ErrorState {
-   name: {
+   reseller_price: {
       isError: boolean
       message: string
    }
@@ -35,13 +36,14 @@ interface ErrorState {
 const props = defineProps<IProps>()
 const emit = defineEmits(['hideModal'])
 const store = useStore()
+const title = ref('')
 const product = ref({
    id: '',
-   name: '',
+   reseller_price: '',
 })
 
 const errorState = ref({
-   name: {
+   reseller_price: {
       isError: false,
       message: '',
    },
@@ -53,12 +55,22 @@ function hideModal() {
    }
 }
 
+function setTitle() {
+   if (props.purpose == 'add') {
+      title.value = 'masukan harga reseller'
+   } else if (props.purpose == 'edit') {
+      title.value = 'ubah harga reseller'
+   } else if (props.purpose == 'up') {
+      title.value = 'naikan harga reseller'
+   }
+}
+
 /**
  * validate input when event triggered
  * @param {String} field
  */
 async function validateInput(field: string) {
-   await productSchema.modalEdit.name
+   await productSchema.modalEdit.reseller_price
       .validateAt(field, product.value)
       .then(() => {
          errorState.value[field as keyof ErrorState].isError = false
@@ -91,24 +103,25 @@ async function editProduct() {
    const admin = store.getters['auth/admin']
    const productData = {
       id: props.productId,
-      item: { admin: admin.id, name: product.value.name },
+      item: { admin: admin.id, reseller_price: product.value.reseller_price },
    }
-   await store
-      .dispatch('product/editBasicInfo', productData)
-      .then(() => {
-         Swal.fire(sweetalertDialog.success('Produk berhasil diubah.'))
-         pageNavigation.goToPage(`/products/${props.productId}`)
-         emit('hideModal')
-      })
-      .catch((err) => {
-         Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
-      })
+   /* await store */
+   /*    .dispatch('product/editBasicInfo', productData) */
+   /*    .then(() => { */
+   /*       Swal.fire(sweetalertDialog.success('Produk berhasil diubah.')) */
+   /*       pageNavigation.goToPage(`/products/${props.productId}`) */
+   /*       emit('hideModal') */
+   /*    }) */
+   /*    .catch((err) => { */
+   /*       Swal.fire(sweetalertDialog.error(err.response.data.errorMessage)) */
+   /*    }) */
 }
 watch(
    () => props.isOpen,
    () => {
       store.dispatch('product/getOne', props.productId)
-      product.value = store.getters['product/getName']
+      product.value = store.getters['product/getResellerPrice']
+      setTitle()
    }
 )
 </script>
@@ -120,7 +133,7 @@ watch(
    >
       <ion-header>
          <ion-toolbar mode="ios">
-            <ion-title>ubah nama produk</ion-title>
+            <ion-title>{{ title }}</ion-title>
             <ion-buttons slot="start">
                <ion-button @click="hideModal">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
@@ -134,10 +147,11 @@ watch(
                <ion-row>
                   <ion-col>
                      <custom-input
-                        label="nama produk"
-                        v-model:input-value="product.name"
-                        :error-state="errorState.name"
-                        @validate-input="validateInput('name')"
+                        label="harga modal"
+                        input-mode="numeric"
+                        v-model:input-value="product.reseller_price"
+                        :error-state="errorState.reseller_price"
+                        @validate-input="validateInput('purchase_price')"
                      ></custom-input>
                   </ion-col>
                </ion-row>

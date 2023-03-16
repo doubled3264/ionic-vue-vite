@@ -36,5 +36,3 @@ function closeModal() {
       </div>
    </ion-modal>
 </template>
-
-<style></style>

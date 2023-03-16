@@ -68,7 +68,6 @@ const errorState = ref<ErrorState>({
 })
 
 useBackButton(10, (processNextHandler) => {
-   terminal.log(`backbutton pressed from ${pageName}`)
    if (pageNavigation.getActive() == pageName) {
       router.back()
    } else {
@@ -77,7 +76,6 @@ useBackButton(10, (processNextHandler) => {
 })
 onIonViewWillEnter(() => {
    pageNavigation.setToActive(pageName)
-   terminal.log(`${pageNavigation.getActive()} is active`)
    getAdminInfo()
 })
 
@@ -150,19 +148,15 @@ async function validateForm() {
    })
 }
 
-function navigate(path: string) {
-   router.push({ path: path })
-}
 async function saveCustomer() {
    const customerData = { admin: admin.value.id, ...customer.value }
    await store
       .dispatch('customer/add', customerData)
       .then(() => {
          Swal.fire(sweetalertDialog.success('Kontak berhasil disimpan.'))
-         navigate('/customers')
+         pageNavigation.goToPage('/customers')
       })
       .catch((err) => {
-         terminal.log(err.response)
          Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
       })
 }
@@ -174,7 +168,7 @@ async function saveCustomer() {
          <ion-toolbar mode="ios">
             <ion-title>tambah pelanggan</ion-title>
             <ion-buttons slot="start">
-               <ion-button @click="navigate('/customers')">
+               <ion-button @click="pageNavigation.goToPage('/customers')">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
    IonModal,
    IonHeader,
@@ -12,8 +11,6 @@ import {
    IonList,
    IonItem,
 } from '@ionic/vue'
-import { Contacts } from '@capacitor-community/contacts'
-import { useRouter } from 'vue-router'
 import CustomIcon from '../../custom/Icon.vue'
 import {
    order,
@@ -26,21 +23,16 @@ import {
 } from '../../../utils/svg'
 import Swal from 'sweetalert2'
 import * as sweetalertDialog from '../../../utils/sweetalert-dialog'
+import * as pageNavigation from '../../../utils/page-navigation'
 
 const props = defineProps({
    isOpen: Boolean,
 })
 const emit = defineEmits(['closeModal'])
-const router = useRouter()
-/* const contactList: any = ref([]) */
 function closeModal() {
    if (props.isOpen) {
       emit('closeModal')
    }
-}
-function navigate(path: string) {
-   closeModal()
-   router.push({ path: path })
 }
 
 function signOut() {
@@ -48,10 +40,15 @@ function signOut() {
       (result) => {
          if (result.isConfirmed) {
             localStorage.removeItem('token')
-            navigate('/login')
+            pageNavigation.goToPage('/login')
+            closeModal()
          }
       }
    )
+}
+function navigate(path: string) {
+   closeModal()
+   pageNavigation.goToPage(path)
 }
 </script>
 <template>

@@ -45,9 +45,7 @@ const errorState = ref<ErrorState>({
       message: '',
    },
 })
-onIonViewWillEnter(() => {
-   terminal.log('print on terminal')
-})
+onIonViewWillEnter(() => {})
 
 /**
  * validate input when event triggered
@@ -70,7 +68,6 @@ async function validateInput(field: string) {
 async function validateForm() {
    /* validate input component */
    for (const item in errorState.value) {
-      terminal.log('validateForm run')
       /* validate input component */
       if (errorState.value[item as keyof ErrorState].isError) {
          Swal.fire(
@@ -84,14 +81,12 @@ async function validateForm() {
    signInAction()
 }
 async function signInAction() {
-   terminal.log('signInAction run')
-   await store.dispatch('auth/login', { ...credentials.value })
-   .then(() => {
-      router.push({ path: '/home' })
-   })
-   .catch(() => {
-      terminal.log('gagal')
-   })
+   await store
+      .dispatch('auth/login', { ...credentials.value })
+      .then(() => {
+         router.push({ path: '/home' })
+      })
+      .catch(() => {})
 }
 </script>
 <template>

@@ -21,8 +21,6 @@ defineProps<IProps>()
 const emit = defineEmits(['update:inputValue'])
 
 function validateInput(item: string) {
-   terminal.log('radio button clicked.')
-   /* terminal.log(item) */
    emit('update:inputValue', item)
 }
 </script>

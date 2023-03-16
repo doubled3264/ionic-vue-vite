@@ -14,7 +14,6 @@ export const setToIDR = (value: number) => {
 }
 
 export const setPricePerPortion = (portionType: string, portion: number) => {
-  terminal.log(`type: ${portionType}, portion: ${portion}`)
   if (portionType == 'satuan') {
     return `\/ pcs`
   } else if (portionType == 'gram') {

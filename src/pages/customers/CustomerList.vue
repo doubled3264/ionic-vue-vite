@@ -11,35 +11,27 @@ import {
    IonItem,
    onIonViewWillEnter,
    useBackButton,
+   onIonViewDidEnter,
 } from '@ionic/vue'
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import CustomIcon from '../../components/custom/Icon.vue'
 import { back, phoneBook, plus } from '../../utils/svg'
 import terminal from 'virtual:terminal'
 import * as pageNavigation from '../../utils/page-navigation'
 
-interface ICustomerList {
-   id: string
-   contact_person_id: string
-   name: string
-   phone_number: string
-}
-
 const store = useStore()
-const router = useRouter()
 const pageName = 'customer list'
 const customerList = ref()
 
 useBackButton(9, (processNextHandler) => {
-   terminal.log(`backbutton pressed from ${pageName}`)
    if (pageNavigation.getActive() == pageName) {
-      navigate('/home')
+      pageNavigation.goToPage('/home')
    } else {
       processNextHandler()
    }
 })
+onIonViewDidEnter(() => {})
 onIonViewWillEnter(() => {
    pageNavigation.setToActive(pageName)
    fetchCustomerList()
@@ -55,10 +47,6 @@ const getPhoneNumber = computed(() => {
       return phoneNumber.length > 0 ? phoneNumber : '-'
    }
 })
-
-function navigate(path: string) {
-   router.push({ path: path })
-}
 </script>
 
 <template>
@@ -67,12 +55,12 @@ function navigate(path: string) {
          <ion-toolbar mode="ios">
             <ion-title>daftar pelanggan</ion-title>
             <ion-buttons slot="start">
-               <ion-button @click="navigate('/home')">
+               <ion-button @click="pageNavigation.goToPage('/home')">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
             <ion-buttons slot="end">
-               <ion-button @click="navigate('/customers/add')">
+               <ion-button @click="pageNavigation.goToPage('/customers/add')">
                   <custom-icon :svg-icon="plus" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
@@ -83,7 +71,7 @@ function navigate(path: string) {
             <ion-item
                v-for="(item, index) in customerList"
                :key="index + 1"
-               @click="navigate(`/customers/${item.id}`)"
+               @click="pageNavigation.goToPage(`/customers/${item.id}`)"
             >
                <div class="customer-list__item">
                   <div class="customer-list__info">

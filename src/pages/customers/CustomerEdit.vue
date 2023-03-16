@@ -12,12 +12,12 @@ import {
 } from '@ionic/vue'
 import Swal, { SweetAlertOptions } from 'sweetalert2'
 import * as sweetalertDialog from '../../utils/sweetalert-dialog'
-import { back, phoneBook } from '../../utils/svg'
+import { back } from '../../utils/svg'
 import CustomIcon from '../../components/custom/Icon.vue'
 import CustomInput from '../../components/custom/Input.vue'
 import * as customerSchema from '../../utils/validation/customer'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import terminal from 'virtual:terminal'
 import * as pageNavigation from '../../utils/page-navigation'
 import { useStore } from 'vuex'
@@ -41,7 +41,6 @@ type ErrorState = {
 
 const store = useStore()
 const route = useRoute()
-const router = useRouter()
 const customerId = ref()
 const admin: TAdmin | any = ref()
 const pageName = 'customer edit'
@@ -63,9 +62,8 @@ const errorState = ref<ErrorState>({
 })
 
 useBackButton(10, (processNextHandler) => {
-   terminal.log(`backbutton pressed from ${pageName}`)
    if (pageNavigation.getActive() == pageName) {
-      navigate(`/customers/${customerId.value}`)
+      pageNavigation.goToPage(`/customers/${customerId.value}`)
    } else {
       processNextHandler()
    }
@@ -88,10 +86,6 @@ async function fetchCustomer() {
 
 function getAdminInfo() {
    admin.value = store.getters['auth/admin']
-}
-
-function navigate(path: string) {
-   router.push({ path: path })
 }
 
 /**
@@ -140,10 +134,9 @@ async function editCustomer() {
       .dispatch('customer/edit', customerData)
       .then(() => {
          Swal.fire(sweetalertDialog.success('Kontak berhasil diubah.'))
-         navigate(`/customers/${customerId.value}`)
+         pageNavigation.goToPage(`/customers/${customerId.value}`)
       })
       .catch((err) => {
-         terminal.log(err.response)
          Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
       })
 }
@@ -154,7 +147,9 @@ async function editCustomer() {
          <ion-toolbar mode="ios">
             <ion-title>ubah data pelanggan</ion-title>
             <ion-buttons slot="start">
-               <ion-button @click="navigate(`/customers/${customerId}`)">
+               <ion-button
+                  @click="pageNavigation.goToPage(`/customers/${customerId}`)"
+               >
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>

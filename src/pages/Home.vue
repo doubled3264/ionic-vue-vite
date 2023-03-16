@@ -28,9 +28,7 @@ const { modalHome, toggleModal } = useModal()
 
 const bottomNavigationItem = ref([])
 
-useBackButton(8, () => {
-   terminal.log(`backbutton pressed from ${pageName}`)
-})
+useBackButton(8, () => {})
 
 onIonViewWillEnter(() => {
    pageNavigation.setToActive(pageName)

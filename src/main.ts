@@ -33,31 +33,29 @@ import './assets/style/index.scss'
 
 axios.defaults.baseURL = import.meta.env.VITE_APIURL
 axios.defaults.headers.post['Content-Type'] =
-   'application/x-www-form-urlencoded'
-terminal.log(`mode : ${ import.meta.env.VITE_CHECKMODE }`)
-terminal.log(`URL for api : ${ import.meta.env.VITE_APIURL }`)
+  'application/x-www-form-urlencoded'
 
 const myAnimation = (baseEl: any, opts: any) => {
-   const { enteringEl, leavingEl } = opts
-   const enteringPage = createAnimation('entering-page-animation')
-   const leavingPage = createAnimation('leaving-page-animation')
-   return createAnimation('root-transition').addAnimation([
-      enteringPage,
-      leavingPage,
-   ])
+  const { enteringEl, leavingEl } = opts
+  const enteringPage = createAnimation('entering-page-animation')
+  const leavingPage = createAnimation('leaving-page-animation')
+  return createAnimation('root-transition').addAnimation([
+    enteringPage,
+    leavingPage,
+  ])
 }
 
 const app = createApp(App)
-   .use(IonicVue, {
-      animated: true,
-      navAnimation: myAnimation,
-   })
-   .use(router)
-   .use(store)
-   .use(VueSweetalert2)
+  .use(IonicVue, {
+    animated: true,
+    navAnimation: myAnimation,
+  })
+  .use(router)
+  .use(store)
+  .use(VueSweetalert2)
 
 router.isReady().then(() => {
-   app.mount('#app')
+  app.mount('#app')
 })
 
 /* Change status bar color */

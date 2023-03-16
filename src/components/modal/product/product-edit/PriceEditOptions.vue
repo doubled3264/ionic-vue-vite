@@ -28,12 +28,6 @@ interface IProps {
 const props = defineProps<IProps>()
 const emit = defineEmits(['hideModal', 'action'])
 
-function hideModal() {
-  if (props.isOpen) {
-    emit('hideModal')
-  }
-}
-
 const countInitialBreakpoint = computed(() => {
   let initialBreakpoint = 0.07
   props.items.forEach((item) => {
@@ -43,6 +37,17 @@ const countInitialBreakpoint = computed(() => {
   })
   return initialBreakpoint
 })
+
+function hideModal() {
+  if (props.isOpen) {
+    emit('hideModal')
+  }
+}
+
+function sendAction(actionName: string) {
+  emit('action', actionName)
+  hideModal()
+}
 </script>
 <template>
   <ion-modal class="asd" :is-open="isOpen" @didDismiss="hideModal" :initial-breakpoint="countInitialBreakpoint">
@@ -50,7 +55,7 @@ const countInitialBreakpoint = computed(() => {
       <div class="modal-edit-product price-option">
         <h3>pilih salah satu</h3>
         <ion-list lines="inset">
-          <ion-item v-for="(item, index) in items" :key="index + 1" v-show="item.active">
+          <ion-item v-for="(item, index) in items" :key="index + 1" v-show="item.active" @click="sendAction(item.type)">
             <p>{{ item.text }}</p>
           </ion-item>
         </ion-list>
@@ -58,10 +63,3 @@ const countInitialBreakpoint = computed(() => {
     </ion-content>
   </ion-modal>
 </template>
-
-<style scoped lang="scss">
-ion-modal {
-  --background: red;
-  --backdrop-opacity: 3;
-}
-</style>

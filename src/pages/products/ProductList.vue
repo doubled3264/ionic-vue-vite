@@ -13,23 +13,20 @@ import {
    useBackButton,
 } from '@ionic/vue'
 import CustomIcon from '../../components/custom/Icon.vue'
-import CustomInput from '../../components/custom/Input.vue'
-import { back, phoneBook, plus } from '../../utils/svg'
+import { back, plus } from '../../utils/svg'
 import * as pageNavigation from '../../utils/page-navigation'
-import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import terminal from 'virtual:terminal'
 import { setToIDR } from '../../utils/formater'
 
 const store = useStore()
-const router = useRouter()
 const pageName = 'product list'
 const productList = ref()
 
 useBackButton(9, (processNextHandler) => {
    if (pageNavigation.getActive() == pageName) {
-      navigate('/home')
+      pageNavigation.goToPage('/home')
    } else {
       processNextHandler()
    }
@@ -41,13 +38,8 @@ onIonViewWillEnter(() => {
 })
 
 async function fetchProductList() {
-   terminal.log('fetch data productList')
    await store.dispatch('product/getAll')
    productList.value = store.getters['product/getProductList']
-}
-
-function navigate(path: string) {
-   router.push({ path: path })
 }
 </script>
 <template>
@@ -56,12 +48,12 @@ function navigate(path: string) {
          <ion-toolbar mode="ios">
             <ion-title>daftar produk</ion-title>
             <ion-buttons slot="start">
-               <ion-button @click="navigate('/home')">
+               <ion-button @click="pageNavigation.goToPage('/home')">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
             <ion-buttons slot="end">
-               <ion-button @click="navigate('/products/add')">
+               <ion-button @click="pageNavigation.goToPage('/products/add')">
                   <custom-icon :svg-icon="plus" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
@@ -71,7 +63,8 @@ function navigate(path: string) {
          <ion-list lines="none">
             <ion-item
                v-for="(item, index) in productList"
-               @click="navigate(`/products/${item.id}`)"
+               :key="index + 1"
+               @click="pageNavigation.goToPage(`/products/${item.id}`)"
             >
                <div class="product-list__item">
                   <h3>{{ item.name }}</h3>

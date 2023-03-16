@@ -39,13 +39,8 @@ body {
    @apply flex flex-col gap-1 items-center;
 }
 
-// ion-grid {
-//    @apply w-10/12;
-//    @apply border border-black;
-// }
-
-// ion-tab-button {
-//    a {
-//       @apply p-0;
-//    }
-// }
+ion-modal::part(backdrop) {
+   /* background: rgba(209, 213, 219); */
+   background: black;
+   --backdrop-opacity: 0.9;
+}

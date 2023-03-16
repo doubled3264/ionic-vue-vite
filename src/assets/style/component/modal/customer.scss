@@ -1,9 +1,3 @@
-ion-modal::part(backdrop) {
-   /* background: rgba(209, 213, 219); */
-   background: black;
-   --backdrop-opacity: 1.7;
-   /* opacity: 0.9; */
-}
 ion-modal.modal-add-options {
    --width: 80%;
    --height: fit-content;

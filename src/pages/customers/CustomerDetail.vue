@@ -7,13 +7,11 @@ import {
    IonTitle,
    IonButtons,
    IonButton,
-   IonPopover,
    onIonViewWillEnter,
    useBackButton,
-   popoverController,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import CustomIcon from '../../components/custom/Icon.vue'
 import PopoverOptions from '../../components/popover/customer/detail/Options.vue'
 import { back, whatsapp, threeDots } from '../../utils/svg'
@@ -25,7 +23,6 @@ import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 
 const store = useStore()
 const route = useRoute()
-const router = useRouter()
 const pageName = 'customer detail'
 const customer = ref({
    id: '',
@@ -41,9 +38,8 @@ const popOver = ref({
 })
 
 useBackButton(10, (processNextHandler) => {
-   terminal.log(`backbutton pressed from ${pageName}`)
    if (pageNavigation.getActive() == pageName) {
-      navigate('/customers')
+      pageNavigation.goToPage('/customers')
    } else {
       processNextHandler()
    }
@@ -55,10 +51,8 @@ onIonViewWillEnter(() => {
 })
 
 async function fetchCustomer() {
-   terminal.log(`params id: ${route.params.id}`)
    await store.dispatch('customer/getOne', route.params.id)
    customer.value = store.getters['customer/getCustomerDetail']
-   terminal.log(store.getters['customer/getCustomerDetail'])
 }
 
 async function togglePopOverOptions(ev: any) {
@@ -73,10 +67,6 @@ async function togglePopOverOptions(ev: any) {
 const getPhoneNumber = computed(() => {
    return customer.value.phone_number == '' ? '-' : customer.value.phone_number
 })
-
-function navigate(path: string) {
-   router.push({ path: path })
-}
 
 function openWhatsapp() {
    const phoneNumber = '62' + customer.value.phone_number.slice(1)
@@ -98,7 +88,7 @@ function openWhatsapp() {
          <ion-toolbar>
             <ion-title>pelanggan</ion-title>
             <ion-buttons slot="start">
-               <ion-button @click="navigate('/customers')">
+               <ion-button @click="pageNavigation.goToPage('/customers')">
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
@@ -123,7 +113,9 @@ function openWhatsapp() {
             :is-open="popOver.options.isOpen"
             :event="popOver.options.event"
             @close-popover="togglePopOverOptions"
-            @edit-action="navigate(`/customers/edit/${customer.id}`)"
+            @edit-action="
+               pageNavigation.goToPage(`/customers/edit/${customer.id}`)
+            "
          />
       </ion-content>
    </ion-page>
