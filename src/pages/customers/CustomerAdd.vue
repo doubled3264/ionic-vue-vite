@@ -11,8 +11,8 @@ import {
    useBackButton,
    onIonViewWillLeave,
 } from '@ionic/vue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, toRef } from 'vue'
+import { useStore } from 'vuex'
 import Swal, { SweetAlertOptions } from 'sweetalert2'
 import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 import { back, phoneBook } from '../../utils/svg'
@@ -20,17 +20,9 @@ import CustomIcon from '../../components/custom/Icon.vue'
 import CustomInput from '../../components/custom/Input.vue'
 import SelectContact from '../../components/modal/customer/SelectContact.vue'
 import * as customerSchema from '../../utils/validation/customer'
-import { useStore } from 'vuex'
-import terminal from 'virtual:terminal'
-import { forEach } from 'lodash'
 import * as pageNavigation from '../../utils/page-navigation'
 import { useModal } from '../../composable/modal'
-
-type TAdmin = {
-   id: string
-   nama: string
-   role: string
-}
+import * as formValidation from '../../utils/validation'
 
 type ErrorState = {
    name: {
@@ -38,18 +30,12 @@ type ErrorState = {
       message: string
    }
    phone_number: {
-      optional: true
       isError: boolean
       message: string
    }
 }
 const store = useStore()
-const router = useRouter()
 const pageName = 'customer add'
-const admin: TAdmin | any = ref()
-const modal = ref({
-   searchContact: false,
-})
 const { modalCustomerAdd, toggleModal } = useModal()
 const customer = ref({
    name: '',
@@ -61,7 +47,6 @@ const errorState = ref<ErrorState>({
       message: '',
    },
    phone_number: {
-      optional: true,
       isError: false,
       message: '',
    },
@@ -69,14 +54,14 @@ const errorState = ref<ErrorState>({
 
 useBackButton(10, (processNextHandler) => {
    if (pageNavigation.getActive() == pageName) {
-      router.back()
+      pageNavigation.goToPage('/customers')
    } else {
       processNextHandler()
    }
 })
 onIonViewWillEnter(() => {
    pageNavigation.setToActive(pageName)
-   getAdminInfo()
+   /* getAdminInfo() */
 })
 
 onIonViewWillLeave(() => {
@@ -84,44 +69,24 @@ onIonViewWillLeave(() => {
    customer.value.phone_number = ''
 })
 
-function toggleSearchContact() {
-   modal.value.searchContact = !modal.value.searchContact
-}
-
-function getAdminInfo() {
-   admin.value = store.getters['auth/admin']
-}
-
-function setErrorState(value: boolean) {
-   forEach(errorState.value, (item: any, key: any) => {
-      if ('optional' in item) {
-         errorState.value[key as keyof ErrorState].isError = false
-      } else {
-         errorState.value[key as keyof ErrorState].isError = value
-      }
-   })
-}
-
 function addFormContact(credentials: any) {
    const { name, phone } = credentials
    customer.value.name = name as string
    customer.value.phone_number = phone as string
-   setErrorState(false)
+   validateInput('name')
+   validateInput('phone_number')
 }
 /**
  * validate input when event triggered
  * @param {String} field
  */
 async function validateInput(field: string) {
-   await customerSchema.add
-      .validateAt(field, customer.value)
-      .then(() => {
-         errorState.value[field as keyof ErrorState].isError = false
-      })
-      .catch((err) => {
-         errorState.value[field as keyof ErrorState].isError = true
-         errorState.value[field as keyof ErrorState].message = err.message
-      })
+   await formValidation.validateInput(
+      toRef(customer, 'value'),
+      toRef(errorState, 'value'),
+      customerSchema.add,
+      field
+   )
 }
 /**
  * validate form before saving
@@ -149,7 +114,8 @@ async function validateForm() {
 }
 
 async function saveCustomer() {
-   const customerData = { admin: admin.value.id, ...customer.value }
+   const admin = store.getters['auth/admin']
+   const customerData = { admin: admin.id, ...customer.value }
    await store
       .dispatch('customer/add', customerData)
       .then(() => {
@@ -173,7 +139,7 @@ async function saveCustomer() {
                </ion-button>
             </ion-buttons>
             <ion-buttons slot="end">
-               <ion-button @click="toggleSearchContact">
+               <ion-button @click="toggleModal('customerAdd', 'searchContact')">
                   <custom-icon :svg-icon="phoneBook" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
@@ -217,8 +183,8 @@ async function saveCustomer() {
             </ion-grid>
          </div>
          <select-contact
-            :is-open="modal.searchContact"
-            @close-modal="toggleSearchContact"
+            :is-open="modalCustomerAdd.searchContact"
+            @close-modal="toggleModal('customerAdd', 'searchContact')"
             @process-contact="addFormContact"
          ></select-contact>
       </ion-content>

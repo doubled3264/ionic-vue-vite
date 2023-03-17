@@ -45,7 +45,7 @@ onIonViewWillLeave(() => {
    <ion-page class="home-page">
       <ion-header class="ion-no-border">
          <ion-toolbar mode="ios">
-            <ion-title>home {{ modalHome.mainMenu }}</ion-title>
+            <ion-title>home</ion-title>
             <ion-buttons slot="end">
                <ion-button
                   ><custom-icon :svg-icon="bell"></custom-icon

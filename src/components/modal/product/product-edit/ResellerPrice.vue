@@ -120,7 +120,7 @@ watch(
    () => props.isOpen,
    () => {
       store.dispatch('product/getOne', props.productId)
-      product.value = store.getters['product/getResellerPrice']
+    product.value = store.getters['product/getSingleDataOfProduct']('reseller_price')
       setTitle()
    }
 )

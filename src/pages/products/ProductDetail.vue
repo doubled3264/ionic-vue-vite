@@ -11,7 +11,7 @@ import {
    useBackButton,
 } from '@ionic/vue'
 import CustomIcon from '../../components/custom/Icon.vue'
-import { back, pencil, threeDots } from '../../utils/svg'
+import { back, pencil, threeDots, info } from '../../utils/svg'
 import * as pageNavigation from '../../utils/page-navigation'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -32,10 +32,11 @@ const popover = ref({
          icon: pencil,
          actionName: 'edit',
       },
-      /* { */
-      /*    title: '', */
-      /*    icon: trash, */
-      /* }, */
+      {
+         title: 'info produk',
+         icon: info,
+         actionName: 'info',
+      },
    ],
 })
 const product = ref({
@@ -44,7 +45,18 @@ const product = ref({
    category: '',
    portion_type: '',
    portion: 0,
-   selling_price: 0,
+   purchase_price: {
+      id: '',
+      price: 0,
+   },
+   selling_price: {
+      id: '',
+      price: 0,
+   },
+   reseller_price: {
+      id: '',
+      price: 0,
+   },
 })
 
 useBackButton(10, (processNextHandler) => {
@@ -105,7 +117,7 @@ function actionPopover(actionName: string) {
             </div>
             <div class="product-price">
                <p>
-                  Rp. {{ setToIDR(product.selling_price) }}
+                  Rp. {{ setToIDR(product.selling_price.price) }}
                   <span>
                      {{
                         setPricePerPortion(

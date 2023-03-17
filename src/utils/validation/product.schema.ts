@@ -5,7 +5,7 @@ export const modalEdit = {
     name: string().trim().required('Nama produk harus diisi.'),
   }),
   purchase_price: object({
-    purchase_price: string()
+    price: string()
       .trim()
       .matches(/^[0-9]+$/, 'Nominal tidak valid')
       .required('Nominal tidak boleh kosong.'),

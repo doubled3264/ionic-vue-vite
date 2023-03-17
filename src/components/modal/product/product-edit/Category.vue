@@ -84,7 +84,8 @@ watch(
    () => props.isOpen,
    () => {
       store.dispatch('product/getOne', props.productId)
-      product.value = store.getters['product/getCategory']
+      /* product.value = store.getters['product/getCategory'] */
+    product.value = store.getters['product/getSingleDataOfProduct']('category')
    }
 )
 </script>
