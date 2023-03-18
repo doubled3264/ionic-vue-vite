@@ -113,3 +113,8 @@
       }
    }
 }
+.product-price-info-page {
+   &__inner {
+      @apply px-4 pt-4;
+   }
+}

@@ -33,9 +33,9 @@ const popover = ref({
          actionName: 'edit',
       },
       {
-         title: 'info produk',
+         title: 'info harga',
          icon: info,
-         actionName: 'info',
+         actionName: 'price info',
       },
    ],
 })
@@ -89,6 +89,8 @@ function togglePopover(ev: any) {
 function actionPopover(actionName: string) {
    if (actionName == 'edit') {
       pageNavigation.goToPage(`/products/edit/${product.value.id}`)
+   } else if (actionName == 'price info') {
+      pageNavigation.goToPage(`/products/price-info/${product.value.id}`)
    }
 }
 </script>
@@ -102,7 +104,7 @@ function actionPopover(actionName: string) {
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
-            <ion-buttons slot="end" @click="togglePopover">
+            <ion-buttons id="product-detail" slot="end" @click="togglePopover">
                <ion-button>
                   <custom-icon :svg-icon="threeDots" width="26"></custom-icon>
                </ion-button>
@@ -135,6 +137,7 @@ function actionPopover(actionName: string) {
             :event="popover.event"
             :items="popover.items"
             @action="actionPopover"
+            trigger-id="product-detail"
          />
       </ion-content>
    </ion-page>

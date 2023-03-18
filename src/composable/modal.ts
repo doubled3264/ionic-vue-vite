@@ -63,8 +63,7 @@ export const useModal = () => {
    })
 
    const toggleModal = (pageName: TPageName, modalName: TModalName) => {
-      modal.value[pageName as keyof IModal][modalName] =
-         !modal.value[pageName as keyof IModal][modalName]
+      modal.value[pageName][modalName] = !modal.value[pageName][modalName]
    }
 
    return {

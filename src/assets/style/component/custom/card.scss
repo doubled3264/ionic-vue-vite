@@ -1,0 +1,44 @@
+.custom-card {
+   @apply px-4 py-3;
+   @apply border border-gray-100;
+   @apply rounded-lg shadow-md;
+   &__head {
+      @apply flex justify-between items-center;
+      @apply text-lapis-lazuli-normal;
+   }
+   &__title {
+      h3 {
+         @apply text-lg font-medium capitalize;
+      }
+   }
+
+   &__nav {
+      &-icon {
+         // @apply text-red-200;
+         animation: cardNavIconRotateBack 200ms ease;
+
+         &.open {
+            @apply rotate-90;
+            animation: cardNavIconRotate 200ms ease;
+         }
+      }
+   }
+}
+
+@keyframes cardNavIconRotate {
+   from {
+      @apply rotate-0;
+   }
+   to {
+      @apply rotate-90;
+   }
+}
+
+@keyframes cardNavIconRotateBack {
+   from {
+      @apply rotate-90;
+   }
+   to {
+      @apply rotate-0;
+   }
+}

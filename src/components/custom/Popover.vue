@@ -14,6 +14,7 @@ interface IProps {
    isOpen: boolean
    event: Event | undefined
    items?: Array<IItems>
+   triggerId: string
 }
 const props = defineProps<IProps>()
 const emit = defineEmits(['hidePopover', 'action'])
@@ -43,6 +44,9 @@ watch(
       :reference="event"
       :arrow="false"
       @didDismiss="hidePopover"
+      side="bottom"
+      alignment="start"
+      :trigger="triggerId"
    >
       <ion-content class="custom-popover__inner">
          <ion-grid>
