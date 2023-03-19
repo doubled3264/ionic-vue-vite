@@ -5,6 +5,7 @@ import {
    IonContent,
    IonToolbar,
    IonTitle,
+   IonButtons,
    IonButton,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
@@ -85,7 +86,8 @@ watch(
    () => {
       store.dispatch('product/getOne', props.productId)
       /* product.value = store.getters['product/getCategory'] */
-    product.value = store.getters['product/getSingleDataOfProduct']('category')
+      product.value =
+         store.getters['product/getSingleDataOfProduct']('category')
    }
 )
 </script>

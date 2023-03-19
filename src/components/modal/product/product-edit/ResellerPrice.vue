@@ -8,6 +8,8 @@ import {
    IonGrid,
    IonRow,
    IonCol,
+   IonButtons,
+   IonButton,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
 import { ref, watch } from 'vue'
@@ -120,7 +122,8 @@ watch(
    () => props.isOpen,
    () => {
       store.dispatch('product/getOne', props.productId)
-    product.value = store.getters['product/getSingleDataOfProduct']('reseller_price')
+      product.value =
+         store.getters['product/getSingleDataOfProduct']('reseller_price')
       setTitle()
    }
 )

@@ -12,6 +12,7 @@ import {
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
 import { useRoute } from 'vue-router'
+import { useToggleComponent } from '../../composable/toggle-show-hide-component'
 import CustomIcon from '../../components/custom/Icon.vue'
 import CustomPopover from '../../components/custom/Popover.vue'
 import { back, whatsapp, threeDots, pencil } from '../../utils/svg'
@@ -24,23 +25,32 @@ import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 const store = useStore()
 const route = useRoute()
 const pageName = 'customer detail'
+const popover = useToggleComponent()
 const customer = ref({
    id: '',
    contact_person_id: '',
    name: '',
    phone_number: '',
 })
-const popover = ref({
-   isOpen: false,
-   event: undefined,
-   items: [
-      {
-         title: 'ubah data',
-         icon: pencil,
-         actionName: 'edit',
-      },
-   ],
-})
+/* const popover = ref({ */
+/*   /1* isOpen: false, *1/ */
+/*   /1* event: undefined, *1/ */
+/*   items: [ */
+/*     { */
+/*       title: 'ubah data', */
+/*       icon: pencil, */
+/*       actionName: 'edit', */
+/*     }, */
+/*   ], */
+/* }) */
+
+const popoverItems = ref([
+   {
+      title: 'ubah data',
+      icon: pencil,
+      actionName: 'edit',
+   },
+])
 
 useBackButton(10, (processNextHandler) => {
    if (pageNavigation.getActive() == pageName) {
@@ -60,14 +70,14 @@ async function fetchCustomer() {
    customer.value = store.getters['customer/getCustomerDetail']
 }
 
-function togglePopover(ev: any) {
-   popover.value.isOpen = !popover.value.isOpen
-   if (popover.value.isOpen) {
-      popover.value.event = ev
-   } else {
-      popover.value.event = undefined
-   }
-}
+/* function togglePopover(ev: any) { */
+/*   popover.value.isOpen = !popover.value.isOpen */
+/*   if (popover.value.isOpen) { */
+/*     popover.value.event = ev */
+/*   } else { */
+/*     popover.value.event = undefined */
+/*   } */
+/* } */
 
 function actionPopover(actionName: string) {
    if (actionName == 'edit') {
@@ -103,7 +113,11 @@ function openWhatsapp() {
                   <custom-icon :svg-icon="back" width="26"></custom-icon>
                </ion-button>
             </ion-buttons>
-            <ion-buttons id="customer-detail" slot="end" @click="togglePopover">
+            <ion-buttons
+               id="customer-detail"
+               slot="end"
+               @click="popover.toggling"
+            >
                <ion-button>
                   <custom-icon :svg-icon="threeDots" width="26"></custom-icon>
                </ion-button>
@@ -121,12 +135,11 @@ function openWhatsapp() {
             </p>
          </div>
          <custom-popover
-            :is-open="popover.isOpen"
-            @hide-popover="togglePopover"
-            :event="popover.event"
-            :items="popover.items"
+            :is-open="popover.isOpen.value"
+            @hide-popover="popover.toggling"
+            :event="popover.event.value"
+            :items="popoverItems"
             @action="actionPopover"
-            trigger-id="customer-detail"
          />
       </ion-content>
    </ion-page>

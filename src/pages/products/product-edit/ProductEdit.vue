@@ -15,7 +15,7 @@ import {
 import { computed, ref, toRef, watch, ToRef } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { useModal } from '../../../composable/modal'
+import { useToggleComponent } from '../../../composable/toggle-show-hide-component'
 import * as pageNavigation from '../../../utils/page-navigation'
 import CustomIcon from '../../../components/custom/Icon.vue'
 import { back, pencil } from '../../../utils/svg'
@@ -30,11 +30,11 @@ import { setToIDR } from '../../../utils/formater'
 import terminal from 'virtual:terminal'
 import { isEmpty } from 'lodash'
 
-interface IAdmin {
-  id: string
-  nama: string
-  role: string
-}
+/* interface IAdmin { */
+/*   id: string */
+/*   nama: string */
+/*   role: string */
+/* } */
 
 type TModalPurposeItem = {
   type: string
@@ -52,9 +52,16 @@ type TModalPurpose = {
 const store = useStore()
 const route = useRoute()
 const pageName = 'product edit'
-const { modalProductEdit, toggleModal } = useModal()
-const productId = ref()
-const admin: IAdmin | any = ref()
+const modalEditName = useToggleComponent()
+const modalEditCategory = useToggleComponent()
+const modalPurchasePriceEditOptions = useToggleComponent()
+const modalSellingPriceEditOptions = useToggleComponent()
+const modalResellerPriceEditOptions = useToggleComponent()
+const modalEditPurchasePrice = useToggleComponent()
+const modalEditSellingPrice = useToggleComponent()
+const modalEditResellerPrice = useToggleComponent()
+const productId = ref('')
+/* const admin: IAdmin | any = ref() */
 const modalPurpose = ref<TModalPurpose>({
   purchase_price: {
     itemActive: '',
@@ -142,14 +149,14 @@ useBackButton(10, (processNextHandler) => {
 
 onIonViewWillEnter(() => {
   pageNavigation.setToActive(pageName)
-  productId.value = route.params.id
-  getAdminInfo()
+  productId.value = route.params.id as string
+  /* getAdminInfo() */
   fetchProduct()
 })
 
-function getAdminInfo() {
-  admin.value = store.getters['auth/admin']
-}
+/* function getAdminInfo() { */
+/*   admin.value = store.getters['auth/admin'] */
+/* } */
 function setPropsForModalPriceEditOptions(
   modalPurposeObject: ToRef<TModalPurposeItem[]>,
   productPrice: any
@@ -185,25 +192,43 @@ const getResellerPrice = computed(() => {
 
 function actionPurchasePriceEditOptions(actionName: string) {
   modalPurpose.value.purchase_price.itemActive = actionName
-  toggleModal('productEdit', 'editPurchasePrice')
+  modalEditPurchasePrice.toggling()
 }
 function actionSellingPriceEditOptions(actionName: string) {
   modalPurpose.value.selling_price.itemActive = actionName
-  toggleModal('productEdit', 'editSellingPrice')
+  modalEditSellingPrice.toggling()
 }
 
 function actionResellerPriceEditOptions(actionName: string) {
   modalPurpose.value.reseller_price.itemActive = actionName
-  toggleModal('productEdit', 'editResellerPrice')
+  modalEditResellerPrice.toggling()
 }
 
-watch(modalProductEdit, (newValue) => {
-  if (newValue.purchasePriceEditOptions) {
+/* watch(modalProductEdit, (newValue) => { */
+/*   if (newValue.purchasePriceEditOptions) { */
+/*     setPropsForModalPriceEditOptions( */
+/*       toRef(modalPurpose.value.purchase_price, 'items'), */
+/*       product.value.purchase_price */
+/*     ) */
+/*   } else if (newValue.resellerPriceEditOptions) { */
+/*     setPropsForModalPriceEditOptions( */
+/*       toRef(modalPurpose.value.reseller_price, 'items'), */
+/*       product.value.reseller_price */
+/*     ) */
+/*   } */
+/* }) */
+
+watch(modalPurchasePriceEditOptions.isOpen, (newValue) => {
+  if (newValue) {//true
     setPropsForModalPriceEditOptions(
       toRef(modalPurpose.value.purchase_price, 'items'),
       product.value.purchase_price
     )
-  } else if (newValue.resellerPriceEditOptions) {
+  }
+})
+
+watch(modalResellerPriceEditOptions.isOpen, (newValue) => {
+  if (newValue) {
     setPropsForModalPriceEditOptions(
       toRef(modalPurpose.value.reseller_price, 'items'),
       product.value.reseller_price
@@ -228,11 +253,11 @@ watch(modalProductEdit, (newValue) => {
         <div class="product-info">
           <h3>info produk</h3>
           <ion-list lines="none">
-            <ion-item @click="toggleModal('productEdit', 'editName')">
+            <ion-item @click="modalEditName.toggling" class="bg-red-200">
               <custom-info label="nama produk" :item="product.name" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
-            <ion-item @click="toggleModal('productEdit', 'editCategory')">
+            <ion-item @click="modalEditCategory.toggling">
               <custom-info label="kategori" :item="product.category" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
@@ -241,48 +266,42 @@ watch(modalProductEdit, (newValue) => {
         <div class="product-price">
           <h3>harga produk</h3>
           <ion-list lines="none">
-            <ion-item @click="
-  toggleModal('productEdit', 'purchasePriceEditOptions')
-">
+            <ion-item @click="modalPurchasePriceEditOptions.toggling">
               <custom-info label="harga modal" :item="`Rp. ${getPurchasePrice}`" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
-            <ion-item @click="
-  toggleModal('productEdit', 'sellingPriceEditOptions')
-">
+            <ion-item @click="modalSellingPriceEditOptions.toggling">
               <custom-info label="harga jual" :item="`Rp. ${setToIDR(product.selling_price.price)}`" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
-            <ion-item @click="
-  toggleModal('productEdit', 'resellerPriceEditOptions')
-">
+            <ion-item @click="modalResellerPriceEditOptions.toggling">
               <custom-info label="harga reseller" :item="`Rp. ${getResellerPrice}`" />
               <custom-icon :svg-icon="pencil" />
             </ion-item>
           </ion-list>
         </div>
       </div>
-      <modal-edit-name :is-open="modalProductEdit.editName" @hide-modal="toggleModal('productEdit', 'editName')"
+      <modal-edit-name :is-open="modalEditName.isOpen.value" @hide-modal="modalEditName.toggling"
         :product-id="productId" />
-      <modal-edit-category :is-open="modalProductEdit.editCategory"
-        @hide-modal="toggleModal('productEdit', 'editCategory')" :product-id="productId" />
-      <modal-edit-purchase-price :is-open="modalProductEdit.editPurchasePrice"
-        @hide-modal="toggleModal('productEdit', 'editPurchasePrice')" :product-id="productId"
+      <modal-edit-category :is-open="modalEditCategory.isOpen.value" @hide-modal="modalEditCategory.toggling"
+        :product-id="productId" />
+      <modal-edit-purchase-price :is-open="modalEditPurchasePrice.isOpen.value"
+        @hide-modal="modalEditPurchasePrice.toggling" :product-id="productId"
         :purpose="modalPurpose.purchase_price.itemActive" />
-      <modal-edit-selling-price :is-open="modalProductEdit.editSellingPrice"
-        @hide-modal="toggleModal('productEdit', 'editSellingPrice')" :product-id="productId"
+      <modal-edit-selling-price :is-open="modalEditSellingPrice.isOpen.value"
+        @hide-modal="modalEditSellingPrice.toggling" :product-id="productId"
         :purpose="modalPurpose.selling_price.itemActive" />
-      <modal-edit-reseller-price :is-open="modalProductEdit.editResellerPrice"
-        @hide-modal="toggleModal('productEdit', 'editResellerPrice')" :product-id="productId"
+      <modal-edit-reseller-price :is-open="modalEditResellerPrice.isOpen.value"
+        @hide-modal="modalEditPurchasePrice.toggling" :product-id="productId"
         :purpose="modalPurpose.reseller_price.itemActive" />
-      <modal-edit-price-options :is-open="modalProductEdit.purchasePriceEditOptions"
-        @hide-modal="toggleModal('productEdit', 'purchasePriceEditOptions')" :items="modalPurpose.purchase_price.items"
+      <modal-edit-price-options :is-open="modalPurchasePriceEditOptions.isOpen.value"
+        @hide-modal="modalPurchasePriceEditOptions.toggling" :items="modalPurpose.purchase_price.items"
         @action="actionPurchasePriceEditOptions" />
-      <modal-edit-price-options :is-open="modalProductEdit.sellingPriceEditOptions"
-        @hide-modal="toggleModal('productEdit', 'sellingPriceEditOptions')" :items="modalPurpose.selling_price.items"
+      <modal-edit-price-options :is-open="modalSellingPriceEditOptions.isOpen.value"
+        @hide-modal="modalSellingPriceEditOptions.toggling" :items="modalPurpose.selling_price.items"
         @action="actionSellingPriceEditOptions" />
-      <modal-edit-price-options :is-open="modalProductEdit.resellerPriceEditOptions"
-        @hide-modal="toggleModal('productEdit', 'resellerPriceEditOptions')" :items="modalPurpose.reseller_price.items"
+      <modal-edit-price-options :is-open="modalResellerPriceEditOptions.isOpen.value"
+        @hide-modal="modalResellerPriceEditOptions.toggling" :items="modalPurpose.reseller_price.items"
         @action="actionResellerPriceEditOptions" />
     </ion-content>
   </ion-page>

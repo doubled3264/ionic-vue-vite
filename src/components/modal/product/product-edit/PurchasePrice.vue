@@ -8,6 +8,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonButton,
+  IonButtons,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
 import { ref, watch } from 'vue'
@@ -23,7 +25,7 @@ import * as pageNavigation from '../../../../utils/page-navigation'
 interface IProps {
   isOpen: boolean
   productId: string
-  purpose: 'add' | 'edit' | 'up'
+  purpose: string | 'add' | 'edit' | 'up'
 }
 
 interface ErrorState {
