@@ -43,18 +43,18 @@ const product = ref({
   category: '',
   portion_type: '',
   portion: 0,
-  purchase_price: {
-    id: '',
-    price: 0,
-  },
+  /* purchase_price: { */
+  /*   id: '', */
+  /*   price: 0, */
+  /* }, */
   selling_price: {
     id: '',
     price: 0,
   },
-  reseller_price: {
-    id: '',
-    price: 0,
-  },
+  /* reseller_price: { */
+  /*   id: '', */
+  /*   price: 0, */
+  /* }, */
 })
 
 useBackButton(10, (processNextHandler) => {

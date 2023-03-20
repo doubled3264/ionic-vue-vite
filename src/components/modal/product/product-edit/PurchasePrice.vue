@@ -21,6 +21,8 @@ import CustomIcon from '../../../custom/Icon.vue'
 import CustomInput from '../../../custom/Input.vue'
 import * as productSchema from '../../../../utils/validation/product.schema'
 import * as pageNavigation from '../../../../utils/page-navigation'
+import { ErrorStateObj } from '../../../../utils/interface/error-state'
+import { includes } from 'lodash'
 
 interface IProps {
   isOpen: boolean
@@ -29,24 +31,21 @@ interface IProps {
 }
 
 interface ErrorState {
-  price: {
-    isError: boolean
-    message: string
-  }
+  price: ErrorStateObj
 }
 
 const props = defineProps<IProps>()
 const emit = defineEmits(['hideModal'])
 const store = useStore()
 const title = ref('')
-const product = ref({
+const purchasePrice = ref({
   id: '',
   price: '',
 })
 
 const errorState = ref({
   price: {
-    isError: false,
+    isError: true,
     message: '',
   },
 })
@@ -73,7 +72,7 @@ function setTitle() {
  */
 async function validateInput(field: string) {
   await productSchema.modalEdit.purchase_price
-    .validateAt(field, product.value)
+    .validateAt(field, purchasePrice.value)
     .then(() => {
       errorState.value[field as keyof ErrorState].isError = false
     })
@@ -96,28 +95,26 @@ function validateForm() {
     sweetalertDialog.confirm('Perubahan akan disimpan.', 'Ya simpan.')
   ).then(async (result) => {
     if (result.isConfirmed) {
-      if (props.purpose == 'add' || props.purpose == 'up') {
-        terminal.log('add or up purchase_price')
-        await savePurchasePrice()
-      } else if (props.purpose == 'edit') {
-        terminal.log('edit purchase_price')
-        await editPurchasePrice()
+      if (props.purpose == 'up') {
+        await savePrice()
+      } else if (includes(['add', 'edit'], props.purpose)) {
+        await updatePrice()
       }
     }
   })
 }
 
-async function savePurchasePrice() {
+async function savePrice() {
   const admin = store.getters['auth/admin']
-  const productData = {
+  const priceData = {
     admin: admin.id,
     product_id: props.productId,
-    purchase_price: product.value.price,
+    purchase_price: purchasePrice.value.price,
   }
   await store
-    .dispatch('product/addPurchasePrice', productData)
+    .dispatch('product/addPurchasePrice', priceData)
     .then(() => {
-      Swal.fire(sweetalertDialog.success('Harga modal berhasil diubah.'))
+      Swal.fire(sweetalertDialog.success('Harga modal berhasil ditambahan.'))
       pageNavigation.goToPage(`/products/${props.productId}`)
       emit('hideModal')
     })
@@ -126,15 +123,15 @@ async function savePurchasePrice() {
     })
 }
 
-async function editPurchasePrice() {
+async function updatePrice() {
   const admin = store.getters['auth/admin']
-  const productData = {
+  const priceData = {
     admin: admin.id,
-    id: product.value.id,
-    purchase_price: String(product.value.price),
+    id: purchasePrice.value.id,
+    purchase_price: purchasePrice.value.price,
   }
   await store
-    .dispatch('product/editPurchasePrice', productData)
+    .dispatch('product/editPurchasePrice', priceData)
     .then(() => {
       Swal.fire(sweetalertDialog.success('Harga modal berhasil diubah.'))
       pageNavigation.goToPage(`/products/${props.productId}`)
@@ -146,18 +143,11 @@ async function editPurchasePrice() {
 }
 watch(
   () => props.isOpen,
-  () => {
-    store.dispatch('product/getOne', props.productId)
-    if (
-      store.getters['product/getSinglePriceDataOfProduct'](
-        'purchase_price'
-      ) != null
-    ) {
-      product.value =
-        store.getters['product/getSinglePriceDataOfProduct'](
-          'purchase_price'
-        )
-    }
+  async () => {
+    await store.dispatch('product/getOne', props.productId)
+    purchasePrice.value =
+      store.getters['product/getSinglePriceDataOfProduct']('purchase_price')
+    validateInput('price')
     setTitle()
   }
 )
@@ -179,7 +169,7 @@ watch(
         <ion-grid>
           <ion-row>
             <ion-col>
-              <custom-input label="harga modal" input-mode="numeric" v-model:input-value="product.price"
+              <custom-input label="harga modal" input-mode="numeric" v-model:input-value="purchasePrice.price"
                 :error-state="errorState.price" @validate-input="validateInput('price')"></custom-input>
             </ion-col>
           </ion-row>

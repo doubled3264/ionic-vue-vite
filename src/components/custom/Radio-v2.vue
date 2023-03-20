@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import {
    IonModal,
-   IonHeader,
-   IonToolbar,
-   IonTitle,
    IonContent,
    IonList,
    IonItem,
@@ -11,18 +8,17 @@ import {
    IonRadio,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
+import { computed } from 'vue'
 import CustomButton from './Button.vue'
 
 interface IProps {
    isOpen: boolean
    inputValue: string
    items: Array<string>
-   initialBreakpoint?: number
+   /* initialBreakpoint?: number */
 }
 
-const props = withDefaults(defineProps<IProps>(), {
-   initialBreakpoint: 0.5,
-})
+const props = defineProps<IProps>()
 const emit = defineEmits(['update:inputValue', 'hideModal'])
 
 function hideModal() {
@@ -34,12 +30,20 @@ function hideModal() {
 function updateValue(value: string) {
    emit('update:inputValue', value)
 }
+
+const countInitialBreakpoint = computed(() => {
+   let initialBreakpoint = 0.07
+   props.items.forEach(() => {
+      initialBreakpoint += 0.06
+   })
+   return initialBreakpoint
+})
 </script>
 <template>
    <ion-modal
       class="custom-radio-v2"
       :is-open="isOpen"
-      :initial-breakpoint="initialBreakpoint"
+      :initial-breakpoint="countInitialBreakpoint"
       @didDismiss="hideModal"
    >
       <ion-content>
@@ -56,12 +60,6 @@ function updateValue(value: string) {
                   </ion-item>
                </ion-radio-group>
             </ion-list>
-            <custom-button
-               text="tutup"
-               :block="true"
-               color="lapis-lazuli"
-               @click="hideModal"
-            />
          </div>
       </ion-content>
    </ion-modal>

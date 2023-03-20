@@ -1,3 +1,5 @@
+import { ToRef } from 'vue'
+
 /**
  * pick value from object
  * @param {object} obj
@@ -24,3 +26,9 @@ export const omit = (obj: any, ...props: string[]) => {
   })
   return result
 }
+
+export const emptyForm = (obj: ToRef<any>, field: string[]) => [
+  field.forEach((item) => {
+    obj.value[item] = ''
+  }),
+]

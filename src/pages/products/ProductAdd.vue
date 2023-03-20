@@ -9,50 +9,60 @@ import {
    IonContent,
    onIonViewWillEnter,
    useBackButton,
+   onIonViewWillLeave,
 } from '@ionic/vue'
+import { computed, ref, toRef } from 'vue'
+import { useStore } from 'vuex'
+import { useToggleComponent } from '../../composable/toggle-show-hide-component'
+import { back } from '../../utils/svg'
+import Swal, { SweetAlertOptions } from 'sweetalert2'
 import CustomInput from '../../components/custom/Input.vue'
 import CustomRadio from '../../components/custom/Radio.vue'
 import CustomIcon from '../../components/custom/Icon.vue'
-import { back } from '../../utils/svg'
-import { computed, ref } from 'vue'
-import Swal, { SweetAlertOptions } from 'sweetalert2'
+import CustomRadioV from '../../components/custom/Radio-v2.vue'
 import * as pageNavigation from '../../utils/page-navigation'
 import * as sweetalertDialog from '../../utils/sweetalert-dialog'
 import * as productSchema from '../../utils/validation/product'
-import { useStore } from 'vuex'
+import * as formValidation from '../../utils/validation/index'
 import terminal from 'virtual:terminal'
+import { ErrorStateObj } from '../../utils/interface/error-state'
+import { emptyForm } from '../../utils/object-helper'
 
-interface IErrorState {
-   name: {
-      isError: boolean
-      message: string
-   }
-   portion_type: {
-      isError: boolean
-      message: string
-   }
-   selling_price: {
-      isError: boolean
-      message: string
-   }
-   weight: {
-      isError: boolean
-      message: string
-   }
+interface ErrorState {
+   name: ErrorStateObj
+   category: ErrorStateObj
+   portion_type: ErrorStateObj
+   selling_price: ErrorStateObj
+   weight: ErrorStateObj
 }
 
 const store = useStore()
 const pageName = 'product add'
 const admin: any = ref()
+const modalRadioCategory = useToggleComponent()
+const modalRadioPortionType = useToggleComponent()
+const categoryListItem = ref([
+   'umpan',
+   'reel',
+   'joran',
+   'mata kail',
+   'pelampung',
+])
+const portionTypeListItem = ref(['satuan', 'gram'])
 const product = ref({
    name: '',
+   category: 'umpan',
    portion_type: 'satuan',
    selling_price: '',
    weight: '',
 })
-const errorState = ref<IErrorState>({
+const errorState = ref<ErrorState>({
    name: {
       isError: true,
+      message: '',
+   },
+   category: {
+      isError: false,
       message: '',
    },
    portion_type: {
@@ -81,6 +91,10 @@ onIonViewWillEnter(() => {
    getAdminInfo()
 })
 
+onIonViewWillLeave(() => {
+   emptyForm(toRef(product, 'value'), ['name', 'selling_price', 'weight'])
+})
+
 function getAdminInfo() {
    admin.value = store.getters['auth/admin']
 }
@@ -100,15 +114,12 @@ const toggleWeightInput = computed(() => {
  * @param {String} field
  */
 async function validateInput(field: string) {
-   await productSchema.addNew
-      .validateAt(field, product.value)
-      .then(() => {
-         errorState.value[field as keyof IErrorState].isError = false
-      })
-      .catch((err) => {
-         errorState.value[field as keyof IErrorState].isError = true
-         errorState.value[field as keyof IErrorState].message = err.message
-      })
+   await formValidation.validateInput(
+      toRef(product, 'value'),
+      toRef(errorState, 'value'),
+      productSchema.addNew,
+      field
+   )
 }
 
 /**
@@ -118,7 +129,7 @@ async function validateForm() {
    /* validate input component */
    for (const item in errorState.value) {
       /* validate input component */
-      if (errorState.value[item as keyof IErrorState].isError) {
+      if (errorState.value[item as keyof ErrorState].isError) {
          Swal.fire(
             sweetalertDialog.error(
                'terdapat form yang belum terisi'
@@ -178,15 +189,26 @@ async function saveNewProduct() {
                      ></custom-input>
                   </ion-col>
                </ion-row>
-               <ion-row>
+               <ion-row @click="modalRadioCategory.toggling">
                   <ion-col>
-                     <custom-radio
-                        label="jenis porsi"
-                        :items="['satuan', 'gram']"
-                        v-model:input-value="product.portion_type"
-                     ></custom-radio>
+                     <custom-input
+                        label="kategori"
+                        v-model:input-value="product.category"
+                        disabled
+                     />
                   </ion-col>
                </ion-row>
+
+               <ion-row @click="modalRadioPortionType.toggling">
+                  <ion-col>
+                     <custom-input
+                        label="jenis porsi"
+                        v-model:input-value="product.portion_type"
+                        disabled
+                     />
+                  </ion-col>
+               </ion-row>
+
                <ion-row v-show="toggleWeightInput">
                   <ion-col>
                      <custom-input
@@ -223,6 +245,18 @@ async function saveNewProduct() {
                </ion-row>
             </ion-grid>
          </div>
+         <custom-radio-v
+            :is-open="modalRadioCategory.isOpen.value"
+            :items="categoryListItem"
+            v-model:input-value="product.category"
+            @hide-modal="modalRadioCategory.toggling"
+         />
+         <custom-radio-v
+            :is-open="modalRadioPortionType.isOpen.value"
+            :items="portionTypeListItem"
+            v-model:input-value="product.portion_type"
+            @hide-modal="modalRadioPortionType.toggling"
+         />
       </ion-content>
    </ion-page>
 </template>

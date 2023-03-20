@@ -4,7 +4,7 @@ import terminal from 'virtual:terminal'
 import { ref } from 'vue'
 interface IProps {
    label: string
-   inputValue: string
+   inputValue: string | number
    inputMode?: any
    type?: any
    disabled?: any

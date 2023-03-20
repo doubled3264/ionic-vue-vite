@@ -21,32 +21,30 @@ import CustomIcon from '../../../custom/Icon.vue'
 import CustomInput from '../../../custom/Input.vue'
 import * as productSchema from '../../../../utils/validation/product.schema'
 import * as pageNavigation from '../../../../utils/page-navigation'
+import { ErrorStateObj } from '../../../../utils/interface/error-state'
 
 interface IProps {
    isOpen: boolean
    productId: string
-   purpose: string
+   purpose: string | 'edit' | 'up'
 }
 
 interface ErrorState {
-   selling_price: {
-      isError: boolean
-      message: string
-   }
+   price: ErrorStateObj
 }
 
 const props = defineProps<IProps>()
 const emit = defineEmits(['hideModal'])
 const store = useStore()
 const title = ref('')
-const product = ref({
+const sellingPrice = ref({
    id: '',
-   selling_price: '',
+   price: '',
 })
 
 const errorState = ref({
-   selling_price: {
-      isError: false,
+   price: {
+      isError: true,
       message: '',
    },
 })
@@ -71,7 +69,7 @@ function setTitle() {
  */
 async function validateInput(field: string) {
    await productSchema.modalEdit.selling_price
-      .validateAt(field, product.value)
+      .validateAt(field, sellingPrice.value)
       .then(() => {
          errorState.value[field as keyof ErrorState].isError = false
       })
@@ -94,34 +92,59 @@ function validateForm() {
       sweetalertDialog.confirm('Perubahan akan disimpan.', 'Ya simpan.')
    ).then(async (result) => {
       if (result.isConfirmed) {
-         await editProduct()
+         if (props.purpose == 'up') {
+            await savePrice()
+         } else if (props.purpose == 'edit') {
+            await updatePrice()
+         }
       }
    })
 }
 
-async function editProduct() {
+async function savePrice() {
    const admin = store.getters['auth/admin']
-   const productData = {
-      id: props.productId,
-      item: { admin: admin.id, selling_price: product.value.selling_price },
+   const priceData = {
+      admin: admin.id,
+      product_id: props.productId,
+      selling_price: sellingPrice.value.price,
    }
-   /* await store */
-   /*    .dispatch('product/editBasicInfo', productData) */
-   /*    .then(() => { */
-   /*       Swal.fire(sweetalertDialog.success('Produk berhasil diubah.')) */
-   /*       pageNavigation.goToPage(`/products/${props.productId}`) */
-   /*       emit('hideModal') */
-   /*    }) */
-   /*    .catch((err) => { */
-   /*       Swal.fire(sweetalertDialog.error(err.response.data.errorMessage)) */
-   /*    }) */
+}
+
+async function updatePrice() {
+   const admin = store.getters['auth/admin']
+   const priceData = {
+      /* id: props.productId, */
+      /* item: { admin: admin.id, selling_price: sellingPrice.value.price }, */
+   }
+   await store
+      .dispatch('product/editSellingPrice', priceData)
+      .then(() => {
+         Swal.fire(sweetalertDialog.success('Harga jual berhasil diubah.'))
+         pageNavigation.goToPage(`/products/${props.productId}`)
+         emit('hideModal')
+      })
+      .catch((err) => {
+         Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
+      })
 }
 watch(
    () => props.isOpen,
-   () => {
-      store.dispatch('product/getOne', props.productId)
-      product.value =
-         store.getters['product/getSingleDataOfProduct']('selling_price')
+   async () => {
+      await store.dispatch('product/getOne', props.productId)
+      sellingPrice.value =
+         store.getters['product/getSinglePriceDataOfProduct']('selling_price')
+      terminal.log(sellingPrice.value)
+      validateInput('price')
+      /* if ( */
+      /*   store.getters['product/getSinglePriceDataOfProduct']( */
+      /*     'selling_price' */
+      /*   ) != null */
+      /* ) { */
+      /*   sellingPrice.value = */
+      /*     store.getters['product/getSinglePriceDataOfProduct']( */
+      /*       'purchase_price' */
+      /*     ) */
+      /* } */
       setTitle()
    }
 )
@@ -148,11 +171,11 @@ watch(
                <ion-row>
                   <ion-col>
                      <custom-input
-                        label="harga modal"
+                        label="harga jual"
                         input-mode="numeric"
-                        v-model:input-value="product.selling_price"
-                        :error-state="errorState.selling_price"
-                        @validate-input="validateInput('purchase_price')"
+                        v-model:input-value="sellingPrice.price"
+                        :error-state="errorState.price"
+                        @validate-input="validateInput('price')"
                      ></custom-input>
                   </ion-col>
                </ion-row>
