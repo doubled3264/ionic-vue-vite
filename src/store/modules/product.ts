@@ -137,30 +137,56 @@ export default {
       },
       async addSellingPrice({}: any, priceData: any) {
          return new Promise<void>((resolve, reject) => {
-            terminal.log(priceData)
-            // axios
-            //    .put('purchase-price', priceData)
-            //    .then(() => {
-            //       resolve()
-            //    })
-            //    .catch((err) => {
-            //       console.log(err)
-            //       reject(err)
-            //    })
+            axios
+               .post('selling-price', priceData)
+               .then(() => {
+                  resolve()
+               })
+               .catch((err) => {
+                  console.log(err)
+                  reject(err)
+               })
          })
       },
       async editSellingPrice({}: any, priceData: any) {
          return new Promise<void>((resolve, reject) => {
             terminal.log(priceData)
-            // axios
-            //    .put('purchase-price', priceData)
-            //    .then(() => {
-            //       resolve()
-            //    })
-            //    .catch((err) => {
-            //       console.log(err)
-            //       reject(err)
-            //    })
+            axios
+               .put('selling-price', priceData)
+               .then(() => {
+                  resolve()
+               })
+               .catch((err) => {
+                  console.log(err)
+                  reject(err)
+               })
+         })
+      },
+      async addResellerPrice({}: any, priceData: any) {
+         return new Promise<void>((resolve, reject) => {
+            axios
+               .post('reseller-price', priceData)
+               .then(() => {
+                  resolve()
+               })
+               .catch((err) => {
+                  console.log(err)
+                  reject(err)
+               })
+         })
+      },
+      async editResellerPrice({}: any, priceData: any) {
+         return new Promise<void>((resolve, reject) => {
+            terminal.log(priceData)
+            axios
+               .put('reseller-price', priceData)
+               .then(() => {
+                  resolve()
+               })
+               .catch((err) => {
+                  console.log(err)
+                  reject(err)
+               })
          })
       },
    },

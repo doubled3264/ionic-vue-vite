@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {
-   IonModal,
-   IonHeader,
-   IonContent,
-   IonToolbar,
-   IonTitle,
-   IonGrid,
-   IonRow,
-   IonCol,
-   IonButtons,
-   IonButton,
+  IonModal,
+  IonHeader,
+  IonContent,
+  IonToolbar,
+  IonTitle,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButtons,
+  IonButton,
 } from '@ionic/vue'
 import terminal from 'virtual:terminal'
 import { ref, watch } from 'vue'
@@ -21,50 +21,50 @@ import CustomIcon from '../../../custom/Icon.vue'
 import CustomInput from '../../../custom/Input.vue'
 import * as productSchema from '../../../../utils/validation/product.schema'
 import * as pageNavigation from '../../../../utils/page-navigation'
+import { ErrorStateObj } from '../../../../utils/interface/error-state'
+import { includes } from 'lodash'
 
 interface IProps {
-   isOpen: boolean
-   productId: string
-   purpose: string
+  isOpen: boolean
+  productId: string
+  purpose: string | 'add' | 'edit' | 'up'
 }
 
 interface ErrorState {
-   reseller_price: {
-      isError: boolean
-      message: string
-   }
+  price: ErrorStateObj
 }
 
 const props = defineProps<IProps>()
 const emit = defineEmits(['hideModal'])
 const store = useStore()
 const title = ref('')
-const product = ref({
-   id: '',
-   reseller_price: '',
+const resellerPrice = ref({
+  id: '',
+  price: '',
+  portion_id: '',
 })
 
 const errorState = ref({
-   reseller_price: {
-      isError: false,
-      message: '',
-   },
+  price: {
+    isError: true,
+    message: '',
+  },
 })
 
 function hideModal() {
-   if (props.isOpen) {
-      emit('hideModal')
-   }
+  if (props.isOpen) {
+    emit('hideModal')
+  }
 }
 
 function setTitle() {
-   if (props.purpose == 'add') {
-      title.value = 'masukan harga reseller'
-   } else if (props.purpose == 'edit') {
-      title.value = 'ubah harga reseller'
-   } else if (props.purpose == 'up') {
-      title.value = 'naikan harga reseller'
-   }
+  if (props.purpose == 'add') {
+    title.value = 'masukan harga reseller'
+  } else if (props.purpose == 'edit') {
+    title.value = 'ubah harga reseller'
+  } else if (props.purpose == 'up') {
+    title.value = 'naikan harga reseller'
+  }
 }
 
 /**
@@ -72,101 +72,117 @@ function setTitle() {
  * @param {String} field
  */
 async function validateInput(field: string) {
-   await productSchema.modalEdit.reseller_price
-      .validateAt(field, product.value)
-      .then(() => {
-         errorState.value[field as keyof ErrorState].isError = false
-      })
-      .catch((err) => {
-         errorState.value[field as keyof ErrorState].isError = true
-         errorState.value[field as keyof ErrorState].message = err.message
-      })
+  await productSchema.modalEdit.reseller_price
+    .validateAt(field, resellerPrice.value)
+    .then(() => {
+      errorState.value[field as keyof ErrorState].isError = false
+    })
+    .catch((err) => {
+      errorState.value[field as keyof ErrorState].isError = true
+      errorState.value[field as keyof ErrorState].message = err.message
+    })
 }
 
 function validateForm() {
-   /* validate input component */
-   for (const item in errorState.value) {
-      /* validate input component */
-      if (errorState.value[item as keyof ErrorState].isError) {
-         Swal.fire(sweetalertDialog.error('terdapat form yang belum terisi'))
-         return ''
+  /* validate input component */
+  for (const item in errorState.value) {
+    /* validate input component */
+    if (errorState.value[item as keyof ErrorState].isError) {
+      Swal.fire(sweetalertDialog.error('terdapat form yang belum terisi'))
+      return ''
+    }
+  }
+  Swal.fire(
+    sweetalertDialog.confirm('Perubahan akan disimpan.', 'Ya simpan.')
+  ).then(async (result) => {
+    if (result.isConfirmed) {
+      if (props.purpose == 'up') {
+        await savePrice()
+      } else if (includes(['add', 'edit'], props.purpose)) {
+        await updatePrice()
       }
-   }
-   Swal.fire(
-      sweetalertDialog.confirm('Perubahan akan disimpan.', 'Ya simpan.')
-   ).then(async (result) => {
-      if (result.isConfirmed) {
-         await editProduct()
-      }
-   })
+    }
+  })
 }
 
-async function editProduct() {
-   const admin = store.getters['auth/admin']
-   const productData = {
-      id: props.productId,
-      item: { admin: admin.id, reseller_price: product.value.reseller_price },
-   }
-   /* await store */
-   /*    .dispatch('product/editBasicInfo', productData) */
-   /*    .then(() => { */
-   /*       Swal.fire(sweetalertDialog.success('Produk berhasil diubah.')) */
-   /*       pageNavigation.goToPage(`/products/${props.productId}`) */
-   /*       emit('hideModal') */
-   /*    }) */
-   /*    .catch((err) => { */
-   /*       Swal.fire(sweetalertDialog.error(err.response.data.errorMessage)) */
-   /*    }) */
+async function savePrice() {
+  const admin = store.getters['auth/admin']
+  const priceData = {
+    admin: admin.id,
+    portion_id: resellerPrice.value.portion_id,
+    reseller_price: resellerPrice.value.price,
+  }
+  await store
+    .dispatch('product/addResellerPrice', priceData)
+    .then(() => {
+      Swal.fire(
+        sweetalertDialog.success('Harga reseller berhasil ditambahan.')
+      )
+      pageNavigation.goToPage(`/products/${props.productId}`)
+      emit('hideModal')
+    })
+    .catch((err) => {
+      Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
+    })
+}
+
+async function updatePrice() {
+  const admin = store.getters['auth/admin']
+  const priceData = {
+    admin: admin.id,
+    id: resellerPrice.value.id,
+    reseller_price: resellerPrice.value.price,
+  }
+  await store
+    .dispatch('product/editResellerPrice', priceData)
+    .then(() => {
+      Swal.fire(sweetalertDialog.success('Harga reseller berhasil diubah.'))
+      pageNavigation.goToPage(`/products/${props.productId}`)
+      emit('hideModal')
+    })
+    .catch((err) => {
+      Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
+    })
 }
 watch(
-   () => props.isOpen,
-   () => {
-      store.dispatch('product/getOne', props.productId)
-      product.value =
-         store.getters['product/getSingleDataOfProduct']('reseller_price')
-      setTitle()
-   }
+  () => props.isOpen,
+  async () => {
+    await store.dispatch('product/getOne', props.productId)
+    resellerPrice.value =
+      store.getters['product/getSinglePriceDataOfProduct']('reseller_price')
+    validateInput('price')
+    setTitle()
+  }
 )
 </script>
 <template>
-   <ion-modal
-      :is-open="isOpen"
-      class="modal-edit-product name"
-      @didDismiss="hideModal"
-   >
-      <ion-header>
-         <ion-toolbar mode="ios">
-            <ion-title>{{ title }}</ion-title>
-            <ion-buttons slot="start">
-               <ion-button @click="hideModal">
-                  <custom-icon :svg-icon="back" width="26"></custom-icon>
-               </ion-button>
-            </ion-buttons>
-         </ion-toolbar>
-      </ion-header>
-      <ion-content>
-         <div class="inner">
-            <ion-grid>
-               <ion-row>
-                  <ion-col>
-                     <custom-input
-                        label="harga modal"
-                        input-mode="numeric"
-                        v-model:input-value="product.reseller_price"
-                        :error-state="errorState.reseller_price"
-                        @validate-input="validateInput('purchase_price')"
-                     ></custom-input>
-                  </ion-col>
-               </ion-row>
-               <ion-row>
-                  <ion-col class="mt-6">
-                     <ion-button expand="block" @click="validateForm"
-                        >Simpan</ion-button
-                     >
-                  </ion-col>
-               </ion-row>
-            </ion-grid>
-         </div>
-      </ion-content>
-   </ion-modal>
+  <ion-modal :is-open="isOpen" class="modal-edit-product name" @didDismiss="hideModal">
+    <ion-header>
+      <ion-toolbar mode="ios">
+        <ion-title>{{ title }}</ion-title>
+        <ion-buttons slot="start">
+          <ion-button @click="hideModal">
+            <custom-icon :svg-icon="back" width="26"></custom-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <div class="inner">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <custom-input label="harga modal" input-mode="numeric" v-model:input-value="resellerPrice.price"
+                :error-state="errorState.price" @validate-input="validateInput('price')"></custom-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="mt-6">
+              <ion-button expand="block" @click="validateForm">Simpan</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-content>
+  </ion-modal>
 </template>

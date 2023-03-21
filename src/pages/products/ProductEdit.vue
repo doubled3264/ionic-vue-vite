@@ -291,7 +291,7 @@ watch(modalResellerPriceEditOptions.isOpen, (newValue) => {
          />
          <modal-edit-reseller-price
             :is-open="modalEditResellerPrice.isOpen.value"
-            @hide-modal="modalEditPurchasePrice.toggling"
+            @hide-modal="modalEditResellerPrice.toggling"
             :product-id="productId"
             :purpose="modalPurpose.reseller_price.itemActive"
          />

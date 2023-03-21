@@ -26,10 +26,10 @@
       @apply w-full my-2 py-4 px-2.5;
       @apply text-gray-500;
       @apply border-2 rounded-lg border-gray-100;
-      @apply shadow-sm;
+      @apply shadow-md;
       h3,
       p {
-         @apply text-base font-medium capitalize;
+         @apply text-lg font-medium capitalize;
       }
       h3 {
          @apply w-8/12;
@@ -38,8 +38,25 @@
 }
 
 .product-detail-page {
+   &__inner {
+      @apply px-3;
+      .price-info {
+         ion-item {
+            --padding-start: 12px;
+            --padding-end: 12px;
+            @apply relative;
+            @apply mb-3;
+            @apply text-gray-500;
+            @apply border border-gray-100 rounded-xl;
+            @apply shadow-sm;
+            svg {
+               @apply absolute right-0 bottom-3;
+            }
+         }
+      }
+   }
    &__info {
-      @apply w-11/12 h-40 mx-auto my-4 py-2 px-4;
+      @apply w-full h-40 my-4 py-2 px-4;
       @apply rounded-md shadow-md bg-lapis-lazuli-normal;
 
       .product-title {
@@ -65,6 +82,29 @@
          }
       }
    }
+   .segment-menu {
+      @apply mt-1 mb-4;
+      ion-segment {
+         @apply px-1 py-0.5;
+         @apply border-2 border-gray-100;
+         @apply shadow-sm;
+         --background: white;
+      }
+
+      ion-segment-button {
+         @apply py-1.5;
+         @apply text-sm font-medium capitalize;
+         --color: rgb(107 114 128);
+         --background-checked: #2867b2;
+         --color-checked: white;
+         --indicator-color: transparent;
+         --indicator-box-shadow: transparent !important;
+
+         &:last-of-type {
+            @apply text-xs;
+         }
+      }
+   }
 }
 
 .product-edit-page {
@@ -83,7 +123,7 @@
             @apply relative;
             @apply mb-3;
             @apply text-gray-500;
-            @apply border-2 border-gray-100 rounded-xl;
+            @apply border border-gray-100 rounded-xl;
             @apply shadow-md;
             svg {
                @apply absolute right-0 bottom-3;
@@ -104,7 +144,7 @@
             @apply relative;
             @apply mb-3;
             @apply text-gray-500;
-            @apply border-2 border-gray-100 rounded-xl;
+            @apply border border-gray-100 rounded-xl;
             @apply shadow-md;
             svg {
                @apply absolute right-0 bottom-3;

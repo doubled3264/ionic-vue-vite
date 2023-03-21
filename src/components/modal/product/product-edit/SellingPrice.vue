@@ -40,6 +40,7 @@ const title = ref('')
 const sellingPrice = ref({
    id: '',
    price: '',
+   portion_id: '',
 })
 
 const errorState = ref({
@@ -105,16 +106,27 @@ async function savePrice() {
    const admin = store.getters['auth/admin']
    const priceData = {
       admin: admin.id,
-      product_id: props.productId,
+      portion_id: sellingPrice.value.portion_id,
       selling_price: sellingPrice.value.price,
    }
+   await store
+      .dispatch('product/addSellingPrice', priceData)
+      .then(() => {
+         Swal.fire(sweetalertDialog.success('Harga jual berhasil ditambahkan.'))
+         pageNavigation.goToPage(`/products/${props.productId}`)
+         emit('hideModal')
+      })
+      .catch((err) => {
+         Swal.fire(sweetalertDialog.error(err.response.data.errorMessage))
+      })
 }
 
 async function updatePrice() {
    const admin = store.getters['auth/admin']
    const priceData = {
-      /* id: props.productId, */
-      /* item: { admin: admin.id, selling_price: sellingPrice.value.price }, */
+      admin: admin.id,
+      id: sellingPrice.value.id,
+      selling_price: sellingPrice.value.price,
    }
    await store
       .dispatch('product/editSellingPrice', priceData)
@@ -135,16 +147,6 @@ watch(
          store.getters['product/getSinglePriceDataOfProduct']('selling_price')
       terminal.log(sellingPrice.value)
       validateInput('price')
-      /* if ( */
-      /*   store.getters['product/getSinglePriceDataOfProduct']( */
-      /*     'selling_price' */
-      /*   ) != null */
-      /* ) { */
-      /*   sellingPrice.value = */
-      /*     store.getters['product/getSinglePriceDataOfProduct']( */
-      /*       'purchase_price' */
-      /*     ) */
-      /* } */
       setTitle()
    }
 )
