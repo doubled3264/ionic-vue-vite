@@ -22,6 +22,7 @@ import { back, pencil, threeDots, info, arrowRight } from '../../utils/svg'
 import CustomIcon from '../../components/custom/Icon.vue'
 import CustomInfo from '../../components/custom/Info.vue'
 import CustomPopover from '../../components/custom/Popover.vue'
+import HistoryPriceChange from './product-detail/HistoryPriceChange.vue'
 import terminal from 'virtual:terminal'
 
 const store = useStore()
@@ -183,6 +184,7 @@ const getResellerPrice = computed(() => {
                      <custom-info
                         label="harga modal"
                         :item="getPurchasePrice"
+                        :is-secret="getPurchasePrice != '-' ? true : false"
                      ></custom-info>
                   </ion-item>
                   <ion-item>
@@ -197,7 +199,8 @@ const getResellerPrice = computed(() => {
                      <custom-info
                         label="harga reseller"
                         :item="getResellerPrice"
-                     ></custom-info>
+                        :is-secret="getResellerPrice != '-' ? true : false"
+                     />
                   </ion-item>
                </ion-list>
             </div>
@@ -211,26 +214,7 @@ const getResellerPrice = computed(() => {
                class="history-price-change"
                v-show="segment.activeSegment.value == 'history-price-change'"
             >
-               hehe
-               <custom-card>
-                  <template #cardTitle>
-                     <h3>perubahan harga modal</h3>
-                  </template>
-                  <template #cardNav>
-                     <div
-                        ref="purchasePriceListCardElement"
-                        class="custom-card__nav-icon"
-                        @click=""
-                     >
-                        <custom-icon :svg-icon="arrowRight" width="18" />
-                     </div>
-                  </template>
-                  <template #cardBody>
-                     <p>harga 1</p>
-                     <p>harga 2</p>
-                     <p>harga 3</p>
-                  </template>
-               </custom-card>
+               <history-price-change />
             </div>
             <custom-popover
                :is-open="popover.isOpen.value"
