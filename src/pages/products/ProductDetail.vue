@@ -50,7 +50,7 @@ const segmentMenuItems = [
    },
    {
       type: 'history-price-change',
-      title: 'riwayat perubahan',
+      title: 'riwayat kenaikan',
       isActive: false,
    },
 ]
@@ -98,7 +98,8 @@ onIonViewDidEnter(() => {
 async function fetchProduct() {
    await store.dispatch('product/getOne', route.params.id)
    product.value = store.getters['product/getProductDetail']
-   terminal.log(product.value)
+
+   await store.dispatch('product/getPriceList', route.params.id)
 }
 
 function actionPopover(actionName: string) {
@@ -110,7 +111,6 @@ function actionPopover(actionName: string) {
 }
 
 const getPurchasePrice = computed(() => {
-   terminal.log(product.value.purchase_price)
    return product.value.purchase_price.price == null
       ? '-'
       : `Rp. ${setToIDR(Number(product.value.purchase_price.price))}`
@@ -210,12 +210,9 @@ const getResellerPrice = computed(() => {
             >
                harga lainnya
             </div>
-            <div
-               class="history-price-change"
-               v-show="segment.activeSegment.value == 'history-price-change'"
-            >
-               <history-price-change />
-            </div>
+            <history-price-change
+               :is-show="segment.activeSegment.value == 'history-price-change'"
+            />
             <custom-popover
                :is-open="popover.isOpen.value"
                @hide-popover="popover.toggling"
