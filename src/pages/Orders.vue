@@ -13,7 +13,7 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 import BottomNavigation from '../layout/BottomNavigation.vue'
 import CustomIcon from '../components/custom/Icon.vue'
-import { plus } from '../utils/svg'
+import { plusCircle } from '../utils/svg'
 
 const store = useStore()
 const page = 'pesanan'
@@ -33,7 +33,7 @@ onIonViewWillEnter(() => {
         <ion-title>pesanan</ion-title>
         <ion-buttons slot="end">
           <ion-button>
-            <custom-icon :svg-icon="plus" width="26"></custom-icon>
+            <custom-icon :svg-icon="plusCircle" width="26"></custom-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>

@@ -172,7 +172,7 @@ watch(
         <ion-grid>
           <ion-row>
             <ion-col>
-              <custom-input label="harga modal" input-mode="numeric" v-model:input-value="resellerPrice.price"
+              <custom-input label="harga reseller" input-mode="numeric" v-model:input-value="resellerPrice.price"
                 :error-state="errorState.price" @validate-input="validateInput('price')"></custom-input>
             </ion-col>
           </ion-row>

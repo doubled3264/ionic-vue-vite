@@ -10,7 +10,8 @@
 .product-detail-page,
 .product-edit-page,
 .product-price-info-page,
-.modal-edit-product {
+.modal-edit-product,
+.modal-product-half-portion-price-add{
    ion-toolbar {
       @apply text-white;
       --min-height: 52px;

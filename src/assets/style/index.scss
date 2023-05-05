@@ -4,6 +4,7 @@
 @import './component/modal/home/main-menu.scss';
 @import './component/modal/customer.scss';
 @import './component/modal/product/edit.scss';
+@import './component/modal/product/detail/half-portion-price/add.scss';
 
 @import './component/custom/input.scss';
 @import './component/custom/button.scss';
@@ -44,4 +45,10 @@ ion-modal::part(backdrop) {
    /* background: rgba(209, 213, 219); */
    background: black;
    --backdrop-opacity: 0.9;
+}
+
+ion-fab {
+   ion-fab-button {
+      --background: #2867b2;
+   }
 }
