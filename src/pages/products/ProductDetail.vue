@@ -22,10 +22,10 @@ import { back, pencil, threeDots, plus } from '../../utils/svg'
 import CustomPageReload from '../../components/custom/PageReload.vue'
 import CustomIcon from '../../components/custom/Icon.vue'
 import CustomPopover from '../../components/custom/Popover.vue'
-import PriceInfo from './product-detail/PriceInfo.vue'
-import HistoryPriceChange from './product-detail/HistoryPriceChange.vue'
-import HalfPortionPrice from './product-detail/HalfPortionPrice.vue'
-import ModalAddHalfPortionPrice from '../../components/modal/product/product-detail/AddHalfPortionPrice.vue'
+import PriceInfo from './detail/PriceInfo.vue'
+import HistoryPriceChange from './detail/HistoryPriceChange.vue'
+import HalfPortionPrice from './detail/HalfPortionPrice.vue'
+import ModalAddHalfPortionPrice from '../../components/modal/product/detail/AddHalfPortionPrice.vue'
 
 const store = useStore()
 const route = useRoute()
