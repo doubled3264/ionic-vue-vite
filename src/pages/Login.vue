@@ -12,26 +12,22 @@ import {
 import { terminal } from 'virtual:terminal'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import CustomInput from '../components/custom/Input.vue'
-import * as authSchema from '../utils/validation/auth'
-import Swal, { SweetAlertOptions } from 'sweetalert2'
-import * as sweetalertDialog from '../utils/sweetalert-dialog'
 import { useStore } from 'vuex'
+import {ErrorStateObj} from '../utils/interface/error-state'
+import {LoginCredentials} from '../utils/interface/auth'
+import * as authSchema from '../utils/validation/auth'
+import * as sweetalertDialog from '../utils/sweetalert-dialog'
+import Swal  from 'sweetalert2'
+import CustomInput from '../components/custom/Input.vue'
 
-type ErrorState = {
-   email: {
-      isError: boolean
-      message: string
-   }
-   password: {
-      isError: boolean
-      message: string
-   }
+interface ErrorState  {
+   email: ErrorStateObj
+   password: ErrorStateObj
 }
 
 const store = useStore()
 const router = useRouter()
-const credentials = ref({
+const credentials = ref<LoginCredentials>({
    email: '',
    password: '',
 })
@@ -73,7 +69,7 @@ async function validateForm() {
          Swal.fire(
             sweetalertDialog.error(
                'terdapat form yang belum terisi'
-            ) as SweetAlertOptions
+            )
          )
          return ''
       }

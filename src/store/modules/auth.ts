@@ -1,5 +1,6 @@
 import axios from 'axios'
 import terminal from 'virtual:terminal'
+import {LoginCredentials} from '../../utils/interface/auth'
 
 type State = {
   admin: object
@@ -36,7 +37,7 @@ export default {
     // },
   },
   actions: {
-    async login({ }: any, credentials: any) {
+    async login({ } , credentials: LoginCredentials) {
       return new Promise<void>((resolve, reject) => {
         axios
           .post('auth/login', credentials)
