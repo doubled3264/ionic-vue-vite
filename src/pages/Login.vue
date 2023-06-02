@@ -13,14 +13,15 @@ import { terminal } from 'virtual:terminal'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import {ErrorStateObj} from '../utils/interface/error-state'
-import {LoginCredentials} from '../utils/interface/auth'
+import { ErrorStateObj } from '../utils/interface/error-state'
+import { LoginCredentials } from '../utils/interface/auth'
 import * as authSchema from '../utils/validation/auth'
 import * as sweetalertDialog from '../utils/sweetalert-dialog'
-import Swal  from 'sweetalert2'
+import Swal from 'sweetalert2'
 import CustomInput from '../components/custom/Input.vue'
+import CustomButton from '../components/custom/Button.vue'
 
-interface ErrorState  {
+interface ErrorState {
    email: ErrorStateObj
    password: ErrorStateObj
 }
@@ -66,11 +67,7 @@ async function validateForm() {
    for (const item in errorState.value) {
       /* validate input component */
       if (errorState.value[item as keyof ErrorState].isError) {
-         Swal.fire(
-            sweetalertDialog.error(
-               'terdapat form yang belum terisi'
-            )
-         )
+         Swal.fire(sweetalertDialog.error('terdapat form yang belum terisi'))
          return ''
       }
    }
@@ -82,7 +79,16 @@ async function signInAction() {
       .then(() => {
          router.push({ path: '/home' })
       })
-      .catch(() => {})
+      .catch((err) => {
+         const statusCode = err.response.status
+         if (statusCode == 404) {
+            Swal.fire(sweetalertDialog.error('Akun tidak ditemukan.'))
+         } else if (statusCode == 401) {
+            Swal.fire(
+               sweetalertDialog.error('Password yang anda masukan salah.')
+            )
+         }
+      })
 }
 </script>
 <template>
@@ -107,6 +113,8 @@ async function signInAction() {
                      <ion-col>
                         <custom-input
                            label="password"
+                           type="password"
+                           use-for-password
                            v-model:input-value="credentials.password"
                            :error-state="errorState.password"
                            @validate-input="validateInput('password')"
@@ -115,9 +123,12 @@ async function signInAction() {
                   </ion-row>
                   <ion-row>
                      <ion-col>
-                        <ion-button expand="block" @click="validateForm"
-                           >masuk</ion-button
-                        >
+                        <custom-button
+                           text="masuk"
+                           color="lapis-lazuli"
+                           block
+                           @click="validateForm"
+                        />
                      </ion-col>
                   </ion-row>
                </ion-grid>

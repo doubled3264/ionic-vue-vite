@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import {
   IonModal,
   IonHeader,
@@ -9,27 +9,23 @@ import {
   IonItem,
   IonButtons,
   IonButton,
+  IonSkeletonText,
+  IonLabel,
 } from '@ionic/vue'
 import { Contacts } from '@capacitor-community/contacts'
 import { cloneDeep, forEach } from 'lodash'
 import { phoneBook, plusCircle } from '../../../utils/svg'
 import CustomIcon from '../../custom/Icon.vue'
-
-interface ISearcResult {
-  id: string
-  name: string
-  phone: string
-}
+import terminal from 'virtual:terminal'
+import { ContactProjection } from '../../../utils/interface/customer'
 
 const props = defineProps({
   isOpen: Boolean,
 })
 const emit = defineEmits(['closeModal', 'processContact'])
-const modal = ref()
-const contactList: any = ref([])
-/* const contactToSave: Ref<ISearcResult> = ref({} as ISearcResult) */
+const contactList: any = ref()
 let contactToSave = {}
-const searchResult: Ref<ISearcResult[]> = ref([])
+const searchResult = ref<Array<ContactProjection>>()
 
 /* function expandBreakpoint() { */
 /*    modal.value.$el.setCurrentBreakpoint(0.5) */
@@ -50,11 +46,14 @@ async function fetchContact() {
       contactList.value.push({
         id: contact.contactId,
         name: contact.name?.display,
-        phone: cleanPhoneNumber(contact.phones[0].number!),
+        phone_number: cleanPhoneNumber(contact.phones[0].number!),
       })
     }
   }
-  searchResult.value = cloneDeep(contactList.value)
+  terminal.log(contactList.value?.length)
+  searchResult.value = await cloneDeep(contactList.value)
+  await nextTick()
+  terminal.log(searchResult.value?.length)
 }
 
 function cleanPhoneNumber(phoneNumber: string) {
@@ -98,19 +97,22 @@ function selectedContact(contactId: string) {
 </script>
 <template>
   <ion-modal :is-open="isOpen" @didDismiss="closeModal" @didPresent="fetchContact" :initial-breakpoint="0.75"
-    :breakpoints="[0.25, 0.5, 0.75]" class="modal-search-contact">
+    class="modal-search-contact">
     <ion-header class="ion-no-border">
       <ion-searchbar class="modal-search-contact searchbar" show-clear-button="focus" :debounce="800"
         @ionChange="handleChange" placeholder="Masukan nama"></ion-searchbar>
     </ion-header>
     <ion-content>
-      <ion-list lines="none">
+      <div v-show="searchResult?.length == 0 || searchResult == undefined" class="pt-32 text-center">
+        <p class="text-3xl font-medium text-gray-500">Memuat kontak...</p>
+      </div>
+      <ion-list v-if="searchResult?.length == contactList.length" lines="none">
         <ion-item v-for="(item, index) in searchResult" :key="index + 1">
           <div class="modal-search-contact__item">
             <div class="modal-search-contact__info">
               <h3>{{ item.name }}</h3>
               <p>
-                <span><custom-icon :svg-icon="phoneBook" width="16" /></span>{{ item.phone }}
+                <span><custom-icon :svg-icon="phoneBook" width="16" /></span>{{ item.phone_number }}
               </p>
             </div>
             <div class="modal-search-contact__nav">

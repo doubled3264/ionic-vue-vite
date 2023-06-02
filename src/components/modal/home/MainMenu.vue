@@ -36,15 +36,15 @@ function closeModal() {
 }
 
 function signOut() {
-   Swal.fire(sweetalertDialog.confirm('Logout akun ?', 'Ya, logout')).then(
-      (result) => {
-         if (result.isConfirmed) {
-            localStorage.removeItem('token')
-            pageNavigation.goToPage('/login')
-            closeModal()
-         }
+   Swal.fire(
+      sweetalertDialog.confirm('Akun anda akan dikeluarkan.', 'Ya, keluar')
+   ).then((result) => {
+      if (result.isConfirmed) {
+         localStorage.removeItem('token')
+         pageNavigation.goToPage('/login')
+         closeModal()
       }
-   )
+   })
 }
 function navigate(path: string) {
    closeModal()

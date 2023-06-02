@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { IonInput, IonLabel } from '@ionic/vue'
+import {
+   IonInput,
+   IonLabel,
+   onIonViewDidEnter,
+   onIonViewWillEnter,
+} from '@ionic/vue'
+import { nextTick, ref, toRef, watch } from 'vue'
+import { eye, eyeStriped } from '../../utils/svg'
+import CustomIcon from './Icon.vue'
+
 import terminal from 'virtual:terminal'
-import { ref } from 'vue'
+import { TextFieldTypes } from '@ionic/core'
 interface IProps {
    label: string
    inputValue: string | number
    inputMode?: any
    type?: any
    disabled?: any
+   useForPassword?: boolean
    errorState?:
       | {
            optional?: boolean
@@ -32,12 +42,36 @@ const props = withDefaults(defineProps<IProps>(), {
 
 const emit = defineEmits(['update:inputValue', 'validateInput'])
 const isTouched = ref(false)
+const inputType = ref(props.type)
+const showPassword = ref(false)
+const passwordIcon = ref(eyeStriped)
 
 function validateInput(event: any) {
    isTouched.value = true
    emit('update:inputValue', event.target.value)
    emit('validateInput')
 }
+
+function toggleShowPassword() {
+   console.log('toggleShowPassword clicked')
+   showPassword.value = !showPassword.value
+   if (showPassword.value) {
+      passwordIcon.value = eye
+      inputType.value = 'text'
+   } else {
+      passwordIcon.value = eyeStriped
+      inputType.value = 'password'
+   }
+
+   console.log(inputType.value)
+}
+
+watch(
+   () => inputType.value,
+   (value) => {
+      console.log(value)
+   }
+)
 </script>
 <template>
    <div class="custom-input">
@@ -50,7 +84,7 @@ function validateInput(event: any) {
          <ion-label position="stacked">{{ label }}</ion-label>
          <ion-input
             :disabled="disabled"
-            :type="type"
+            :type="inputType"
             :value="inputValue"
             @ion-input="validateInput"
             :inputmode="inputMode"
@@ -59,5 +93,12 @@ function validateInput(event: any) {
       <p class="custom-input__helper" v-show="errorState.isError && isTouched">
          {{ errorState.message }}
       </p>
+      <div
+         v-if="useForPassword"
+         class="show-hide-password"
+         @click="toggleShowPassword"
+      >
+         <custom-icon :svg-icon="passwordIcon" />
+      </div>
    </div>
 </template>

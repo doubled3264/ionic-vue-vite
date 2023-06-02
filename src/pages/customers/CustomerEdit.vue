@@ -13,20 +13,22 @@ import {
    onIonViewWillEnter,
    useBackButton,
 } from '@ionic/vue'
-import Swal, { SweetAlertOptions } from 'sweetalert2'
-import * as sweetalertDialog from '../../utils/sweetalert-dialog'
-import { back } from '../../utils/svg'
-import CustomIcon from '../../components/custom/Icon.vue'
-import CustomInput from '../../components/custom/Input.vue'
-import * as customerSchema from '../../utils/validation/customer'
 import { ref, toRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import Swal from 'sweetalert2'
+import { back } from '../../utils/svg'
+import * as sweetalertDialog from '../../utils/sweetalert-dialog'
+import * as customerSchema from '../../utils/validation/customer'
 import terminal from 'virtual:terminal'
 import * as pageNavigation from '../../utils/page-navigation'
 import * as formValidation from '../../utils/validation'
+import CustomIcon from '../../components/custom/Icon.vue'
+import CustomInput from '../../components/custom/Input.vue'
+import { CustomerDataForSave } from '../../utils/interface/customer'
+import { Admin } from '../../utils/interface/auth'
 
-type ErrorState = {
+interface ErrorState {
    name: {
       isError: boolean
       message: string
@@ -84,22 +86,13 @@ async function fetchCustomer() {
  * validate input when event triggered
  * @param {String} field
  */
-async function validateInput(field: string) {
+async function validateInput(field: 'name' | 'phone_number') {
    await formValidation.validateInput(
       toRef(customer, 'value'),
       toRef(errorState, 'value'),
       customerSchema.add,
       field
    )
-   /* await customerSchema.add */
-   /*    .validateAt(field, customer.value) */
-   /*    .then(() => { */
-   /*       errorState.value[field as keyof ErrorState].isError = false */
-   /*    }) */
-   /*    .catch((err) => { */
-   /*       errorState.value[field as keyof ErrorState].isError = true */
-   /*       errorState.value[field as keyof ErrorState].message = err.message */
-   /*    }) */
 }
 
 /**
@@ -110,11 +103,7 @@ async function validateForm() {
    for (const item in errorState.value) {
       /* validate input component */
       if (errorState.value[item as keyof ErrorState].isError) {
-         Swal.fire(
-            sweetalertDialog.error(
-               'terdapat form yang belum terisi'
-            ) as SweetAlertOptions
-         )
+         Swal.fire(sweetalertDialog.error('terdapat form yang belum terisi'))
          return ''
       }
    }
@@ -127,8 +116,11 @@ async function validateForm() {
    })
 }
 async function editCustomer() {
-   const admin = store.getters['auth/admin']
-   const customerData = { admin: admin.id, ...customer.value }
+   const admin = <Admin>store.getters['auth/admin']
+   const customerData = <CustomerDataForSave>{
+      admin: admin.id,
+      ...customer.value,
+   }
    await store
       .dispatch('customer/edit', customerData)
       .then(() => {
