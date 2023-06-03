@@ -26,6 +26,8 @@ import PriceInfo from './detail/PriceInfo.vue'
 import HistoryPriceChange from './detail/HistoryPriceChange.vue'
 import HalfPortionPrice from './detail/HalfPortionPrice.vue'
 import ModalAddHalfPortionPrice from '../../components/modal/product/detail/AddHalfPortionPrice.vue'
+import { ProductDetail, ProductDetailAPI } from '../../utils/interface/product'
+import { omit } from '../../utils/object-helper'
 
 const store = useStore()
 const route = useRoute()
@@ -62,27 +64,15 @@ const segmentMenuItems = [
     isActive: false,
   },
 ]
-const product = ref({
+const product = ref<ProductDetail>({
   id: '',
   name: '',
   category: '',
   portion_type: '',
   portion: 0,
-  purchase_price: {
-    id: '',
-    product_id: '',
-    price: '',
-  },
-  selling_price: {
-    id: '',
-    portion_id: '',
-    price: '',
-  },
-  reseller_price: {
-    id: '',
-    portion_id: '',
-    price: '',
-  },
+  purchase_price: null,
+  selling_price: 0,
+  reseller_price: null,
 })
 
 useBackButton(10, (processNextHandler) => {
@@ -105,14 +95,26 @@ onIonViewDidEnter(() => {
 
 async function fetchProduct() {
   await store.dispatch('product/getOne', route.params.id)
-  product.value = store.getters['product/getProductDetail']
-
   await store.dispatch('product/getPriceList', route.params.id)
+
+  const productData = <ProductDetailAPI>(
+    store.getters['product/getProductDetail']
+  )
+  product.value = omit(
+    productData,
+    'purchase_price',
+    'selling_price',
+    'reseller_price'
+  )
+  product.value!.purchase_price = productData.purchase_price.price
+  product.value!.selling_price = productData.selling_price.price
+  product.value!.reseller_price = productData.reseller_price.price
+  console.log(product.value)
 }
 
 function actionPopover(actionName: string) {
   if (actionName == 'edit') {
-    pageNavigation.goToPage(`/products/edit/${product.value.id}`)
+    pageNavigation.goToPage(`/products/edit/${product.value?.id}`)
   } else if (actionName == 'add half portion') {
     halfPriceModal.toggling()
   }
@@ -140,19 +142,19 @@ function actionPopover(actionName: string) {
       <div class="product-detail-page__inner">
         <div class="product-detail-page__info">
           <div class="product-title">
-            <h3>{{ product.name }}</h3>
-            <p>#{{ product.category }}</p>
+            <h3>{{ product?.name }}</h3>
+            <p>#{{ product?.category }}</p>
           </div>
           <div class="product-price">
             <p>
-              Rp. {{ setToIDR(Number(product.selling_price.price)) }}
+              Rp. {{ setToIDR(Number(product?.selling_price)) }}
               <span>
                 {{
-    setPricePerPortion(
-      product.portion_type,
-      Number(product.portion)
-    )
-}}
+                  setPricePerPortion(
+                    product?.portion_type,
+                    product?.portion
+                  )
+                }}
               </span>
             </p>
           </div>
@@ -165,14 +167,17 @@ function actionPopover(actionName: string) {
             </ion-segment-button>
           </ion-segment>
         </div>
-        <price-info v-show="segment.activeSegment.value == 'price-info'" :purchase-price="product.purchase_price.price"
-          :selling-price="product.selling_price.price" :reseller-price="product.reseller_price.price" />
+        <price-info v-show="
+          segment.activeSegment.value == 'price-info' &&
+          product != undefined
+        " :purchase-price="product!.purchase_price" :selling-price="product!.selling_price"
+          :reseller-price="product!.reseller_price" />
         <half-portion-price v-show="segment.activeSegment.value == 'another-price'" />
         <history-price-change :is-show="segment.activeSegment.value == 'history-price-change'" />
         <custom-popover :is-open="popover.isOpen.value" @hide-popover="popover.toggling" :event="popover.event.value"
           :items="popoverItems" @action="actionPopover" trigger-id="product-detail" />
         <modal-add-half-portion-price :is-open="halfPriceModal.isOpen.value" @hide-modal="halfPriceModal.toggling"
-          :product-id="product.id" />
+          :product-id="product!.id" />
       </div>
     </ion-content>
   </ion-page>

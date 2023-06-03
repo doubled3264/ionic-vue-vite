@@ -7,9 +7,10 @@ export interface ContactProjection {
 //page customer add
 export interface CustomerDataForSave extends Omit<ContactProjection, 'id'> {
    admin: string
+   id?: string
 }
 
-//page customer detail
+//---------------------------------- Page Customer List & Customer Detail
 export interface CustomerDetail extends ContactProjection {
    contact_person_id: string
 }

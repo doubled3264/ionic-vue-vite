@@ -19,10 +19,11 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 import terminal from 'virtual:terminal'
 import { setToIDR } from '../../utils/formater'
+import { SimpleProduct } from '../../utils/interface/product'
 
 const store = useStore()
 const pageName = 'product list'
-const productList = ref()
+const productList = ref<Array<SimpleProduct>>()
 
 useBackButton(9, (processNextHandler) => {
   if (pageNavigation.getActive() == pageName) {

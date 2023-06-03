@@ -6,17 +6,20 @@ import terminal from 'virtual:terminal'
  * @return{string} 100.000
  */
 export const setToIDR = (value: number) => {
-  let formatter = new Intl.NumberFormat('id-ID', {
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-  })
-  return formatter.format(value)
+   let formatter = new Intl.NumberFormat('id-ID', {
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+   })
+   return formatter.format(value)
 }
 
-export const setPricePerPortion = (portionType: string, portion: number) => {
-  if (portionType == 'satuan') {
-    return `\/ pcs`
-  } else if (portionType == 'gram') {
-    return `\/ ${portion} gram`
-  }
+export const setPricePerPortion = (
+   portionType: string = 'satuan',
+   portion: number = 1
+) => {
+   if (portionType == 'satuan') {
+      return `\/ pcs`
+   } else if (portionType == 'gram') {
+      return `\/ ${portion} gram`
+   }
 }

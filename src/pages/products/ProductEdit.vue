@@ -28,7 +28,6 @@ import ModalEditResellerPrice from '../../components/modal/product/product-edit/
 import ModalEditPriceOptions from '../../components/modal/product/product-edit/PriceEditOptions.vue'
 import { setToIDR } from '../../utils/formater'
 import terminal from 'virtual:terminal'
-import { isEmpty } from 'lodash'
 
 type TModalPurposeItem = {
    type: string

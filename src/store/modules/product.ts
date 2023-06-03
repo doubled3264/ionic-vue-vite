@@ -1,33 +1,15 @@
 import axios from 'axios'
 import { pick } from '../../utils/object-helper'
 import terminal from 'virtual:terminal'
-
-interface IProductList {
-   id: string
-   name: string
-   selling_price: number
-}
-
-interface IProductDetail {
-   id: string
-   name: string
-   category: string
-   portion_type: string
-   portion: number
-   purchase_price: any
-   selling_price: any
-   reseller_price: any
-}
-
-interface SingleProductPriceList {
-   purchasePrice: any
-   sellingPrice: any
-   resellerPrice: any
-}
+import {
+   ProductDetailAPI,
+   SimpleProduct,
+   SingleProductPriceList,
+} from '../../utils/interface/product'
 
 interface State {
-   productList: Array<IProductList>
-   productDetail: IProductDetail
+   productList: Array<SimpleProduct>
+   productDetail: ProductDetailAPI
    singleProductPriceList: SingleProductPriceList
 }
 
@@ -49,18 +31,20 @@ export default {
          return { ...pick(state.productDetail, 'id', fieldName) }
       },
       getSinglePriceDataOfProduct: (state: State) => (fieldName: string) => {
-         terminal.log(state.productDetail[fieldName as keyof IProductDetail])
-         return state.productDetail[fieldName as keyof IProductDetail]
+         return state.productDetail[fieldName as keyof ProductDetailAPI]
       },
    },
    mutations: {
-      setProductList: (state: State, data: any) => {
+      setProductList: (state: State, data: Array<SimpleProduct>) => {
          state.productList = data
       },
-      setProductDetail: (state: State, data: any) => {
+      setProductDetail: (state: State, data: ProductDetailAPI) => {
          state.productDetail = data
       },
-      setSingleProductPriceList: (state: State, data: any) => {
+      setSingleProductPriceList: (
+         state: State,
+         data: SingleProductPriceList
+      ) => {
          state.singleProductPriceList = data
       },
    },

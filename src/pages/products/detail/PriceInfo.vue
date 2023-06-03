@@ -4,23 +4,23 @@ import { computed } from 'vue'
 import CustomInfo from '../../../components/custom/Info.vue'
 import { setToIDR } from '../../../utils/formater'
 
-interface IProps {
-  purchasePrice: string
-  sellingPrice: string
-  resellerPrice: string
+interface Props {
+  purchasePrice: number | null
+  sellingPrice: number
+  resellerPrice: number | null
 }
 
-const props = defineProps<IProps>()
+const props = defineProps<Props>()
 
 const getPurchasePrice = computed(() => {
   return props.purchasePrice == null
     ? '-'
-    : `Rp. ${setToIDR(Number(props.purchasePrice))}`
+    : `Rp. ${setToIDR(props.purchasePrice)}`
 })
 const getResellerPrice = computed(() => {
   return props.resellerPrice == null
     ? '-'
-    : `Rp. ${setToIDR(Number(props.resellerPrice))}`
+    : `Rp. ${setToIDR(props.resellerPrice)}`
 })
 </script>
 <template>
@@ -31,7 +31,7 @@ const getResellerPrice = computed(() => {
           :is-secret="getPurchasePrice != '-' ? true : false"></custom-info>
       </ion-item>
       <ion-item>
-        <custom-info label="harga jual" :item="`Rp. ${setToIDR(Number(sellingPrice))}`"></custom-info>
+        <custom-info label="harga jual" :item="`Rp. ${setToIDR(sellingPrice!)}`"></custom-info>
       </ion-item>
       <ion-item>
         <custom-info label="harga reseller" :item="getResellerPrice"
