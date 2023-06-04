@@ -11,8 +11,14 @@
    &__form {
       @apply mt-10;
 
-      ion-row:last-child {
-         @apply mt-8;
+      ion-row {
+         &:last-child {
+            @apply mt-8;
+         }
+
+         ion-col {
+            // @apply px-0;
+         }
       }
       ion-button {
          @apply text-base font-medium capitalize;

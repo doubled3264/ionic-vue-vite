@@ -9,6 +9,7 @@ import {
   IonButton,
   onIonViewWillEnter,
 } from '@ionic/vue'
+import { StatusBar, Style } from '@capacitor/status-bar'
 import { terminal } from 'virtual:terminal'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -18,6 +19,7 @@ import { LoginCredentials } from '../utils/interface/auth'
 import * as authSchema from '../utils/validation/schema/auth'
 import * as sweetalertDialog from '../utils/sweetalert-dialog'
 import Swal from 'sweetalert2'
+import CustomPageReload from '../components/custom/PageReload.vue'
 import CustomInput from '../components/custom/Input.vue'
 import CustomButton from '../components/custom/Button.vue'
 
@@ -42,7 +44,11 @@ const errorState = ref<ErrorState>({
     message: '',
   },
 })
-onIonViewWillEnter(() => { })
+onIonViewWillEnter(async () => {
+  await StatusBar.setStyle({ style: Style.Light })
+
+  await StatusBar.setBackgroundColor({ color: '#ffffff' })
+})
 
 /**
  * validate input when event triggered
@@ -93,6 +99,7 @@ async function signInAction() {
 </script>
 <template>
   <ion-page class="login-page">
+    <custom-page-reload />
     <ion-content>
       <div class="login-page__inner">
         <h3>login terlebih dahulu.</h3>
@@ -100,13 +107,13 @@ async function signInAction() {
           <ion-grid>
             <ion-row>
               <ion-col>
-                <custom-input label="email" input-mode="email" v-model:input-value="credentials.email"
+                <custom-input label="Email" input-mode="email" v-model:input-value="credentials.email"
                   :error-state="errorState.email" @validate-input="validateInput('email')"></custom-input>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                <custom-input label="password" type="password" use-for-password v-model:input-value="credentials.password"
+                <custom-input label="Password" type="password" use-for-password v-model:input-value="credentials.password"
                   :error-state="errorState.password" @validate-input="validateInput('password')"></custom-input>
               </ion-col>
             </ion-row>

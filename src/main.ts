@@ -59,4 +59,4 @@ router.isReady().then(() => {
 })
 
 /* Change status bar color */
-StatusBar.setBackgroundColor({ color: '#2867b2' })
+// StatusBar.setBackgroundColor({ color: '#2867b2' })

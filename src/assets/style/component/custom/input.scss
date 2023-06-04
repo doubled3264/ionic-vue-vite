@@ -1,8 +1,9 @@
 .custom-input {
-   @apply my-2 px-2 py-0.5;
+   // @apply my-2 px-2 py-0.5;
+   @apply my-2 px-0 py-0.5;
 
    &__inner {
-      @apply px-1 py-1;
+      @apply px-1;
       @apply relative;
       @apply border rounded-lg border-gray-300;
 
@@ -25,11 +26,17 @@
    ion-label {
       @apply absolute -top-6 left-2;
       @apply px-1;
-      @apply text-xl font-medium capitalize text-gray-500;
+      @apply text-lg capitalize text-gray-400;
       @apply bg-white;
+      @apply hidden;
    }
 
    ion-input {
       @apply font-normal;
+
+      &::placeholder {
+         @apply capitalize;
+      }
+      --placeholder-color: #9ca3af;
    }
 }
