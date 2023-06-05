@@ -1,6 +1,17 @@
 .custom-input {
-   // @apply my-2 px-2 py-0.5;
    @apply my-2 px-0 py-0.5;
+
+   &__label {
+      @apply absolute top-1.5 left-4 z-10 opacity-100;
+      @apply px-0.5;
+      @apply text-sm text-gray-400;
+      @apply bg-white;
+      animation: labelGoUp 250ms ease;
+
+      &.show {
+         @apply top-7 opacity-0 hidden;
+      }
+   }
 
    &__inner {
       @apply px-1;
@@ -17,7 +28,7 @@
       @apply text-sm text-red-500;
    }
    .show-hide-password {
-      @apply absolute top-6 right-4 z-10;
+      @apply absolute top-5 right-4 z-10;
       @apply cursor-pointer;
       @apply p-2;
       @apply text-gray-400;
@@ -33,10 +44,20 @@
 
    ion-input {
       @apply font-normal;
+      @apply text-gray-500;
 
       &::placeholder {
          @apply capitalize;
       }
       --placeholder-color: #9ca3af;
+   }
+}
+
+@keyframes labelGoUp {
+   from {
+      @apply top-7 opacity-0;
+   }
+   to {
+      @apply top-1.5 opacity-100;
    }
 }

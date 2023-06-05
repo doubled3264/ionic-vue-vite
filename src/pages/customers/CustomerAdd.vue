@@ -162,13 +162,13 @@ async function saveCustomerContact() {
         <ion-grid>
           <ion-row>
             <ion-col>
-              <custom-input label="nama" v-model:input-value="customer.name" :error-state="errorState.name"
+              <custom-input label="Nama" v-model:input-value="customer.name" :error-state="errorState.name"
                 @validate-input="validateInput('name')"></custom-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <custom-input label="no telepon *" v-model:input-value="customer.phone_number"
+              <custom-input label="No telepon *" v-model:input-value="customer.phone_number"
                 :error-state="errorState.phone_number" @validate-input="validateInput('phone_number')"></custom-input>
             </ion-col>
           </ion-row>

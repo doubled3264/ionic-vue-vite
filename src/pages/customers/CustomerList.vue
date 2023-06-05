@@ -3,6 +3,7 @@ import {
   IonHeader,
   IonPage,
   IonToolbar,
+  IonSearchbar,
   IonButtons,
   IonButton,
   IonTitle,
@@ -15,10 +16,12 @@ import {
 } from '@ionic/vue'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import CustomIcon from '../../components/custom/Icon.vue'
 import { back, phoneBook, plusCircle } from '../../utils/svg'
-import terminal from 'virtual:terminal'
 import * as pageNavigation from '../../utils/page-navigation'
+import CustomIcon from '../../components/custom/Icon.vue'
+import CustomPageReload from '../../components/custom/PageReload.vue'
+import terminal from 'virtual:terminal'
+import PageReloadVue from '../../components/custom/PageReload.vue'
 
 const store = useStore()
 const pageName = 'customer list'
@@ -51,9 +54,9 @@ const getPhoneNumber = computed(() => {
 
 <template>
   <ion-page class="customers-list-page">
+    <custom-page-reload />
     <ion-header class="ion-no-border">
       <ion-toolbar mode="ios">
-        <ion-title>daftar pelanggan</ion-title>
         <ion-buttons slot="start">
           <ion-button @click="pageNavigation.goToPage('/home')">
             <custom-icon :svg-icon="back" width="26"></custom-icon>
@@ -64,6 +67,8 @@ const getPhoneNumber = computed(() => {
             <custom-icon :svg-icon="plusCircle" width="26"></custom-icon>
           </ion-button>
         </ion-buttons>
+      <ion-searchbar class="customer-list-page searchbar" show-clear-button="focus" :debounce="800"
+        @ionChange="" placeholder="Cari pelanggan"></ion-searchbar>
       </ion-toolbar>
     </ion-header>
     <ion-content>

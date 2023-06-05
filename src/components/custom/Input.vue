@@ -67,16 +67,17 @@ function toggleShowPassword() {
 }
 
 const showLabel = () => {
-  const anim = createAnimation()
-  console.log(ionLabelEl.value.$el)
+  terminal.log(ionLabelEl.value.$el)
+  terminal.log('showLabel run')
   return createAnimation()
-    .addElement(ionLabelEl.value.$el)
+    .addElement(ionLabelEl.value)
     .duration(1500)
     .iterations(1)
     .fromTo('transform', 'translateX(0px)', 'translateX(100px)')
 }
 
 const hideLabel = () => {
+terminal.log('hidelabel run')
   return showLabel().direction('reverse')
 }
 
@@ -93,7 +94,7 @@ watch(
   () => placeholderState.isOpen.value,
   async (value) => {
     await nextTick()
-    console.log(value)
+    terminal.log(value)
     if (!value) {
       hideLabel()
     } else {
@@ -104,11 +105,11 @@ watch(
 </script>
 <template>
   <div class="custom-input">
+    <label :class="[ 'custom-input__label' ,{ 'show': !placeholderState.isOpen.value } ]">{{label}}</label>
     <div :class="[
       ' custom-input__inner',
       { error: errorState.isError && isTouched },
     ]">
-      <ion-label position="stacked" ref="ionLabelEl">{{ label }}</ion-label>
       <ion-input :disabled="disabled" :type="inputType" :value="inputValue" @ion-input="validateInput"
         @ion-focus="placeholderState.toggling" @ion-blur="placeholderState.toggling" :inputmode="inputMode"
         :placeholder="getPlaceholder"></ion-input>
@@ -117,7 +118,7 @@ watch(
       {{ errorState.message }}
     </p>
     <div v-if="useForPassword" class="show-hide-password" @click="toggleShowPassword">
-      <custom-icon :svg-icon="passwordIcon" />
+      <custom-icon :svg-icon="passwordIcon" width="22"/>
     </div>
   </div>
 </template>
