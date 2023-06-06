@@ -41,11 +41,22 @@ body {
    @apply flex flex-col gap-1 items-center;
 }
 
+// ion-modal::part(backdrop) {
+//    /* background: rgba(209, 213, 219); */
+//    background: rgba(255, 99, 165, 1) !important;
+// }
+
 ion-modal::part(backdrop) {
-   /* background: rgba(209, 213, 219); */
-   background: black;
-   --backdrop-opacity: 0.9;
+   --box-shadow: 0 28px 48px rgba(0, 0, 0);
+   --backdrop-opacity: var(--ion-backdrop-opacity, 1.5);
 }
+
+// ion-modal {
+//    ion-backdrop {
+//       @apply bg-blue-500;
+//       background: red;
+//    }
+// }
 
 ion-fab {
    ion-fab-button {

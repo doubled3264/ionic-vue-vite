@@ -11,18 +11,19 @@
 .product-edit-page,
 .product-price-info-page,
 .modal-edit-product,
-.modal-product-half-portion-price-add{
+.modal-product-half-portion-price-add {
    ion-toolbar {
       @apply text-white;
+      --padding-top: 28px;
       // --min-height: 52px;
-      // --background: #2867b2;
-      --background: #ffffff;
+      --background: #2867b2;
+      // --background: #ffffff;
       ion-title {
          @apply text-lg font-medium capitalize text-white;
       }
 
       ion-buttons {
-        @apply mt-3.5;
+         @apply mt-3.5;
          ion-button {
             --color: #6b7280;
             // svg {
